@@ -14,8 +14,15 @@
 \usepackage[top=0mm,bottom=4mm,left=0mm,right=1mm]{geometry}
 % \usepackage[framemethod=tikz]{mdframed}
 \usepackage{microtype}
-\DeclareMathOperator*{\argmin}{arg\,min}
-\DeclareMathOperator*{\argmax}{arg\,max}
+\usepackage{float}
+\usepackage{mathtools}
+
+% \DeclareMathOperator*{\argmin}{arg\,min}
+% \DeclareMathOperator*{\argmax}{arg\,max}
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+\input{math_commands.tex}
+\input{my_math_commands.tex} 
 
 \let\bar\overline
 
