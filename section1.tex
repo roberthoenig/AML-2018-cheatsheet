@@ -3,6 +3,12 @@ $\normal(x;\mu, \sigma^2)=\sqrt{2\pi\sigma^2}e^{-(x-\mu)^2/(2\sigma^2)}$\\
 $\normal(x;\bm{\mu}, \bm{\Sigma})= |2\pi\bm{\Sigma}|^{-1/2} e^{-\frac{1}{2}(\mathbf{x}-\bm{\mu})^T\bm{\Sigma}^{-1}(\mathbf{x}-\bm{\mu})} $\\
 $\mathrm{Exp}(x|\lambda){=}\lambda e^{-\lambda x}$, $\mathrm{Ber}(x|\theta){=}\theta^x (1{-}\theta)^{(1-x)}$
 
+\subsection*{Conditional Gaussians}
+\textbf{Given:} $X_V \sim N(\mu_V, \Sigma_{VV})$, $V=A\cupdot B$\\
+\textbf{Then:} $P(X_A|X_B=x_B)=N(\mu_{A|B}, \Sigma_{A|B})$\\
+$\mu_{A|B}=\mu_A+\Sigma_{AB}\Sigma^{-1}_{BB}(x_B-\mu_B)$\\
+$\Sigma_{A|B}=\Sigma_{AA}-\Sigma_{AB}\Sigma^{-1}_{BB}\Sigma_{BA}$
+
 \subsection*{Functions}
 $\sigma(x)=\frac{1}{1+e^{-x}}$, $\sigma'(x)=\sigma(x)(1-\sigma(x))$
 
