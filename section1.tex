@@ -15,6 +15,15 @@ $\sigma(x)=\frac{1}{1+e^{-x}}$, $\sigma'(x)=\sigma(x)(1-\sigma(x))$
 \subsection*{Modes of Convergence}
 $X_n \overset{p}{\to} X \coloneqq P(|X_n-X|>\epsilon){\to} 0 \,\,\,\,\forall \epsilon > 0$.
 
+\subsection*{Robbins-Monro Conditions}
+(1) $\sum\eta(t) = \infty$ and (2) $\sum\eta(t)^2 < \infty$
+
+\subsection*{Taylor expansion {\color{gray} around $\color{gray}\hat\vw$}}
+$f(\vw) \approx f(\hat\vw) + (\vw - \hat\vw)^T \nabla f(\hat\vw) + \frac{1}{2}(\vw-\hat\vw)^TH_f(\hat\vw)(\vw-\hat\vw)$
+
+\subsection*{Laplace's method}
+$p(\rvw) \propto \exp(-R(\rvw))$ where $R(\rvw) = -\log(p(\rvw))$\\ $\approx R(\rvw^*) - \frac{1}{2}(\rvw-\rvw^*)^TH_R(\rvw^*)(\rvw-\rvw^*)$\\ with $\rvw^* = \argmin_\rvw R(\rvw)$. Thus, $p(\rvw) \approx \mathcal{N}(\rvw;\rvw^*, H_R^{-1}(\rvw^*))$.
+
 \subsection*{\textcolor{red}{Chebyshev}}
 $\mathbb{P}(|X-\mathbb{E}[X]|\geq \epsilon)\leq \frac{\mathbb{V}[X]}{\epsilon^2}$\\
 
@@ -110,20 +119,16 @@ $\frac{\partial}{\partial\theta}(b_{\myhat{\theta}}+1)^2 =
  \E[\Lambda\myhat{\theta}]^2 = \E[\Lambda(\myhat{\theta} - \E[\myhat{\theta}])]^2 \leq \E[\Lambda^2]\E[(\myhat{\theta}-\E[\myhat{\theta}])^2] = \mathcal{I}(\theta)\E[(\myhat{\theta} - \theta_0)^2] + b_{\myhat{\theta}}^2
 $
 
-\subsection*{\textcolor{red}{Bayesian density learning}}
-Prior Knowledge of $p(\theta)$,\\
-Find Posterior Density: $p(\theta|\mathcal{X})$.\\
-$\mathcal{X}^n=\{x_1, \cdots, x_n\}$\\
-$p(\theta|\mathcal{X}^n)=\frac{p(x_n|\theta)p(\theta|\mathcal{X}^{n-1})}{\int p(x_n|\theta)p(\theta|\mathcal{X}^{n-1} d\theta}$
-% Difficult \& needs prior knowledge. But better against overfitting.
+\subsection*{High-dimensional MLE}
+MLE estimate biased if no. of samples grows with no. of parameters:
+$\frac{1}{d}\sum_{j\leq d}(\hat w_j-\alpha_* w_j)\overset{a.s.}{\underset{d,N\to\infty}{\to}}0$, $a^* \neq 1$.
 
 \section*{Optimization}
 \subsection*{Gradient Descent}
-$\theta^{\mathrm{new}}\leftarrow\theta^{\mathrm{old}}-\eta\nabla_{\theta}\mathcal{L}$\\
-Convergence isn't guaranteed.\\
-Less zigzag by adding momentum: \\$\theta^{(l+1)}\leftarrow\theta^{(l)}-\eta\nabla_{\theta}\mathcal{L}+\mu(\theta^{l}-\theta^{(l-1)})$
+$\vw^{(k+1)} \leftarrow \vw^{(k)} - \eta(k)\nabla\mathrm{NLL}(\vw^{(k)})$ {\color{gray}  $\color{gray}+ \mu(k)(\vw^{(k+1)} - \vw^{(k)})$}(momentum to reduce zigzag)\\
+\textbf{Optimal $\eta$} (derive with 2nd-order Taylor exp. of NLL around $\vw^{(k)}$):\\
+$\eta(k)=\frac{||\nabla\mathrm{NLL}(\vw^{(k)})||^2}{\nabla\mathrm{NLL}(\vw^{(k)})^TH_{\mathrm{NLL}}(\vw^{(k)})\nabla\mathrm{NLL}(\vw^{(k)})}$
 
 \subsection*{Newton's Method}
-Use 2nd order derivation. (Hessian)
-$\theta^{\mathrm{new}}\leftarrow\theta^{\mathrm{old}}-\eta(\nabla_{\theta}\mathcal{L}/\nabla^2_{\theta}\mathcal{L})$\\
-$H=\nabla^2_{\theta}\mathcal{L}$ has to be p.d (convex func).
+\mbox{$\vw^{(k+1)}=\vw^{(k)} - H_{\mathrm{NLL}}^{-1}(\vw^{(k)})\nabla\mathrm{NLL}(w^{(k)})$}\\
+Derive with 2nd-order Taylor exp. of NLL around $\vw^{(k)}$
