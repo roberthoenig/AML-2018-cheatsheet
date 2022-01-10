@@ -126,30 +126,29 @@ Large $C$ $\color{black}\implies$ narrow margin, little slack.
 Consider the feature map $\vx \rightarrow \phi(\vx)$ induced by kernel $K(\vx, \vx')$. The \textbf{Dual} then becomes $\max_\alpha -\frac{1}{2}\sum a_ia_jy_iy_j{\color{red}K(\vx_i, \vx_j)} + \sum\alpha_i$ s.t.
 $\alpha_j\geq 0$. For classification, we get ${\vw^*}^T\vx + w_0 = \sum_i \alpha_i^*y_iK(\vx_i, \vx) + w_0$.
 
-\subsection*{Multiclass SVM}
-$\forall$class $z\in\{1,2,\cdots,M\}$ we introduce $\mathbf{w}_z$ and define the margin $m$ s.t.:\\
-$(\mathbf{w}_{z_i}^T\mathbf{y}_i+w_{z_i,0})-\max_{z\not=Z_i}(\mathbf{w}_z^T\mathbf{y}_i+w_{z,0})\geq m, \forall_{\mathbf{y}_i\in \mathcal{Y}}$
+\subsection*{\mbox{Multiclass SVM (classes $z\in\{1,\cdots,M\}$)}}
+\textbf{Primal:} $\min_{\{\vw_z\}_{z=1}^M} \frac{1}{2}\sum_{z=1}^M \vw^T_z\vw_z {\color{gray} + C\sum_i \xi_i}$ s.t.
+$\forall i. (\mathbf{w}_{z_i}^T\mathbf{y}_i+w_{z_i})-\max_{z\not=z_i}(\mathbf{w}_z^T\mathbf{y}_i+w_{z})\geq 1{\color{gray}-\xi_i}$
 
-\subsection*{Structured SVM}
+\subsection*{SSVM (complex inputs $\vy\in\mathcal{Y}$, complex outputs $z\in\mathbb{K}$)}
+\textbf{Define:}\\$\psi(z,\vy):\mathcal{Y}\times\mathbb{K}\to \mathbb{R}^d$ (feature map)\\
+\mbox{$\Delta(z,z'):\mathbb{K}\times\mathbb{K}\to \mathbb{R}$ (loss function)}\\
+\textbf{Primal:}
+$\min_\vw \frac{1}{2}\vw^T\vw {\color{gray} + C\sum_i \xi_i}$ s.t.
+\mbox{$\forall i,z\neq z_i.\,\,\mathbf{w}^T\psi(\mathbf{y}_i,z_i)-\mathbf{w}^T\psi(\mathbf{y}_i,z)$}\\$\geq \Delta(z, z_i){\color{gray}-\xi_i}$\\
 Each sample \textbf{y} is assigned to a structured output label $z$\\
-Output Space Representation:\\
-joint feature map: $\mathbf{\psi}(z,\mathbf{y})$\\
-Scoring function: $f_{\mathbf{w}}(z,\mathbf{y})=\mathbf{w}^T\mathbf{\psi(z, \mathbf{y})}$\\
-Classify: $\hat{z}=h(\mathbf{y})\argmax_{z\in\mathcal{K}}f_{\mathbf{w}(z, \mathbf{y})}$
+\textbf{Pred.:} \mbox{$h(\mathbf{y}) = \argmax_{z\in\mathbb{K}} \mathbf{w}^T\psi(\mathbf{y},z)$}
+\textbf{Training:} Cutting-plane algorithm --- successively add constr. and solve for $\vw$ until all constr. satisfied (need to eff. compute \emph{loss-augmented inference} $\argmax_{z'}\Delta(z_i, z') + \vw^T\psi(\vy_i, z')$).
 
 
 \subsection*{Kernels}
-Similarity based reasoning\\
-Gram Matrix $K{=}K(\mathbf{x}_i, \mathbf{x}_i), 1{\leq} i,j{\leq} n$\\
-$K(\mathbf{x}, \mathbf{x'}) {=} \phi(\mathbf{x})^T\phi(\mathbf{x'})\quad K(\mathbf{x},\mathbf{x'}){=}K(\mathbf{x'},\mathbf{x})$\\
-$K(\mathbf{x},\mathbf{x'})$ pos.semi-def. (all EV $\geq$ 0)\\
-If $K_1$ \& $K_2$ are kernels $K$ is too:\\
+\textbf{Definition:} $K$ kernel \emph{iff} $K$ symmetric and $\int f(x)f(y)K(x,y)dx\,dy \geq 0\,\,\forall f\in\mathcal{L}_2$ \emph{iff} every Gram-matrix on K is psd.\\
+\textbf{Valid Kernels:}
+$K(\mathbf{x},\mathbf{x'}){=}\mathbf{x}^T\mathbf{x'}$\\
+$K(\mathbf{x},\mathbf{x'}){=}\mathrm{exp}(-||\mathbf{x}{-}\mathbf{x'}||_2^2/h^2)$\\
 $K(\mathbf{x}, \mathbf{x'})=K_1(\mathbf{x}, \mathbf{x'})K_2(\mathbf{x}, \mathbf{x'})$\\
-$K(\mathbf{x},\mathbf{x'})=\alpha K_1(\mathbf{x}, \mathbf{x'})+\beta K_2(\mathbf{x}, \mathbf{x'})$\\
-$K(\mathbf{x},\mathbf{x'}){=}K_1(h(\mathbf{x}), h(\mathbf{x'}))\quad h:\mathcal{X}{\rightarrow}\mathcal{X}$\\
-$K(\mathbf{x},\mathbf{x'}){=}h(K_1(\mathbf{x}, \mathbf{x'}))\quad h$: poly/exp\\
-Kernel Function Examples:\\
-$K(\mathbf{x},\mathbf{x'}){=}\mathbf{x}^T\mathbf{x'}\quad K(\mathbf{x},\mathbf{x'}){=}(\mathbf{x}^T\mathbf{x'}{+}1)^p$\\
-RBF(Gauss):$K(\mathbf{x},\mathbf{x'}){=}\mathrm{exp}(-||\mathbf{x}{-}\mathbf{x'}||_2^2/h^2)$\\
-Sigmoid:$K(\mathbf{x},\mathbf{x'}){=}\mathrm{tanh}(\alpha\mathbf{x}^T\mathbf{x'}+c)$\\
-not p.s-d eg: $\mathbf{x}{=}[1,-1], \mathbf{x'}{=}[-1,2]$
+$K(\mathbf{x},\mathbf{x'})=\alpha K_1(\mathbf{x}, \mathbf{x'})\,\,\forall \alpha\geq0$\\
+$K(\rvx, \rvx') = K_1(\rvx, \rvx') + K_2(\rvx, \rvx')$\\
+$K(\mathbf{x},\mathbf{x'}){=}K_1(\phi(\mathbf{x}), \phi(\mathbf{x'}))\quad$\\
+$K(\mathbf{x},\mathbf{x'}){=}h(K_1(\mathbf{x}, \mathbf{x'}))\quad h$: poly>0/exp\\
+\textbf{Mercer's Theorem:} Any kernel $K$ admits an eigendecomposition $K(x,y) = \sum_{i=1}^\infty \lambda_i e_i(x)e_i(y)$.
