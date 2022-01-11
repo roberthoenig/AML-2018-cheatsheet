@@ -17,6 +17,11 @@
 \usepackage{float}
 \usepackage{mathtools}
 \usepackage{xcolor}
+\usepackage{stackengine,amssymb,graphicx,scalerel}
+
+\newcommand\SL{\stackengine{.2ex}{S\,}{\,L}{U}{c}{F}{F}{L}}
+\newcommand\CircArrowRight[1]{\stackengine{-.3ex}{\scalebox{.8}{#1}}{\CAR}{O}{c}{F}{F}{L}}
+\newcommand\CAR{\scaleto{\circlearrowright}{3ex}}
 
 % \usepackage{MnSymbol}
 

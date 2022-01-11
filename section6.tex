@@ -1,42 +1,27 @@
 \section*{Ensemble Methods}
-\subsection*{Combining Regressors}
-Set of estimators: $\hat{f}_1(x), \cdots, \hat{f}_B(x)$\\
-simple average: $\hat{f}(x) = \frac{1}{B}\sum_{i=1}^B\hat{f}_i(x)$
-$\mathrm{Bias}[\hat{f}(x)]=\frac{1}{B}\sum_{i=1}^B\mathrm{Bias}[f_i(x)]$\\
-$\mathbb{V}[\hat{f}(x)]\approx\frac{\sigma^2}{B}$ if the estimators are uncorrelated.
-
-\subsection*{Combining Classifiers}
-Input: classifiers $c_1(x),\cdots,c_B(x)$\\
-Infer $\hat{c}_B(x){=}\text{sgn}(\sum_{b=1}^B\alpha_b c_b(x))$\\
-with weights $\{\alpha_b\}_{b=1}^B $\\
-Requires diversity of the classifiers.
-
 \subsection*{Bagging}
-Train on bootstrapped subsets.\\
-Sample: $\mathcal{Z}=\{(x_1,y_1),\cdots(x_n,y_n)\}$\\
-$\mathcal{Z}^*$: chose i.i.d from $\mathcal{Z}$ w. replacement. Covariance small, variance similar, bias unaffected.
+Given dataset $Z ={(x_i,y_i)}$, ind. (\emph{not possible!}) bootstrap samples $(Z'_i) \sim Z$, classifiers $b, b^{(i)}$ trained on $Z, (Z'_i)$, bagging creates classifier $\bar{b}^{(M)}(x) = \frac{1}{M}\sum b^{(i)}(x)$. We have $\E[(Y-\bar{b}^{(M)}(X))^2] \leq \E[(Y-b(X))^2]$.\\
+\textbf{Random forests:} Train ensemble with bagging, randomly subsample features for each splitting step.\\
+\textbf{Randomized Feature Selection:} Create datasets $X_i = \bar{T_i}^TX\bar{S_i}$ with $T_i \overset{\mathrm{P= \eta}}{\subset} [n]$, $S_i \overset{\mathrm{P=\eta}}{\subset} [p]$ and $\bar{A} =$\\
+\emph{Theorems for case of linear regression:}
+\emph{\textbf{Opt.:}} $\inf_{\alpha\leq\frac{p}{n}}\lim_{M,n,p\to\infty}\E[R(\beta^{(M)})] = \inf_{\lambda}\lim_{M,n,p\to\infty}\E[R(\hat{\beta}_{\lambda}^{\mathrm{ridge}})]$ and $\inf_{\lambda}\hat{\beta}_{\lambda}^{\mathrm{ridge}}$ is asympt. opt., where $\beta^{(i)} = \argmin_\beta ||X_i\bar{S}_t^T\beta - \bar{T}_i^T\vy||^2_2$ s.t. $(S^c_t)^T\beta=0$.\\
+\mbox{\emph{\textbf{Regu.:}} If $X_i = X_i\bar{S_i}$ then $\beta^{(M)}\overset{p}{\to}\alpha\hat{\beta}^{\mathrm{LS}}$.}
+\emph{\textbf{SGD+Dropout = RFS+Ensemble:}} If $\beta^{(t+t)} = \beta{(t)}-\eta(t)\nabla_\beta||X_i\bar{S_i}\bar{S_i}^T\beta - \vy||^2_2$ then $\beta^{(t)} \overset{p}{\to}\argmin_\beta \frac{1}{M}\sum_{t\leq M}R^{(t)}(\beta)$.
 
-% \subsection*{Random Forest (Bagging strategy)}
-% Collection of uncorr. decision trees.
-% Partition data space recursively. Grow the tree sufficiently deep to reduce bias.
-% Prediction with voting.
-
-\subsection*{Boosting}
-Combine uncorr. weak learners in sequence. (Weak to avoid overfitting).\\
-Coeff. of $\hat{c}_{b+1}$ depend on $\hat{c}_{b}$'s results\\
-\textbf{AdaBoost} (minimizes exp. loss)\\
-Init: $\mathcal{X}{=}\{(x_1,y_1),\cdots,(x_n,y_n)\}, w_i^{(1)}{=}\frac{1}{n}$\\
-Fit  $\hat{c}_b(x)$ to $\mathcal{X}$ weighted by $w^{(b)}$\\
-$\epsilon_b=\sum_{i=1}^nw_i^{(b)}\mathbb{I}_{\{c_b(x_i)\not=y_i\}}/\sum_{i=1}^nw_i^{(b)}$\\
-$\alpha_b = \mathrm{log}\frac{1-\epsilon_b}{\epsilon_b}>0$\\
-$w_i^{(b+1)}=w_i^{(b)}\mathrm{exp}(\alpha_i\mathbb{I}_{\{\hat{c_b(x_i)\not=y_i}\}})$\\
-return $\hat{c}_B(x){=}\mathrm{sgn}(\sum_{b{=}1}^B\alpha_bc_b(x))$\\
-Best approx. at log-odds ratio. Like stagewise-additive modeling.
-
-\subsection*{Difference}
-(1) Boosting keeps identical training data, bagging potentially varies the training data for each classifier. (2) Boosting weighs the prediction of each classifier according to its accuracy, bagging gives same importance to each.
-\subsection*{Notes}
-AdaBoost gives large weight to samples that are hard to classify: those could be outliers. For bagging, there is a chance that imbalanced data-sets lead to bootstrap samples missing a class alltogether. Fix by making the bootstrap size large enough s.t. at least one point is included.
+\subsection*{Boosting (> Forests > Bagging)}
+\textbf{AdaBoost:}\\
+Init: $b^{(0)}=0$, $\vw=\frac{1}{n}$, $b^{(i)}\in\{0,1\}$\\
+\emph{Train, Eval, Add, Reweight, {\tiny\CircArrowRight{}}:}\\
+$b^{(t)} = \argmin_b \mathcal{L}^{(\vw)}(b)=\sum w_i\mathbf{1}_{b(x_i)\neq y_i}$
+$\epsilon_t=\mathcal{L}^{(\vw)}(b^{(t)})$\\
+$b^{(t)} = b^{(t-1)} + \alpha_t b^{(t)}$, $\alpha_t = \log(\frac{1}{\mathrm{err}_t}-1)$.\\
+$w_i \leftarrow w_i\exp(\alpha_t\mathbf{1}_{b^{t}(x_i) \neq y_i})$\\
+\textbf{Viewpoints:}\\
+\mbox{\emph{\textbf{FSAM:}} \emph{(= AdaBoost for $\mathcal{L}=\exp(-yy')$}}
+$(\alpha_{t+1}, b^{(t+1)}) = \argmin\sum\mathcal{L}(y_i, \alpha_i b(x_i) + f_t(x_i))$.
+\emph{\textbf{Maximum Margin:}} Assume wlog. $\sum \alpha_i = 1$. Then $\mathrm{margin}(x_i)=|\sum_{i:b^{(t)}(x_i)=1}\alpha_i - \sum_{i:b^{(t)}(x_i)=-1}\alpha_i| \to 1$
+With $p\geq 1-\delta$ $\bar{b}^{(M)} \leq O(\frac{1}{n}\frac{1}{\mu^2}\log|\mathcal{H}|\ldots)$ + frac. of $x$ with $\mathrm{margin}(x) \leq \mu$. frac. of $x$ with $\mathrm{margin}(x) \leq \mu$ decays exp. with $M$.AdaBoost yields AdaBoost yields 
+\emph{\textbf{spiky interpolation}} + \emph{\textbf{self-averaging}} (multiple models cancel out each others noise). \emph{\textbf{Double descent:}} \emph{Underparam. ($\gamma = \frac{p}{n}\in(0,1))$:} $\lim_{n,p\to\infty} R(\hat{\beta}^{\mathrm{OLS}}) = \sigma^2\frac{\gamma}{1-\gamma}$ \emph{Overparam. ($\gamma = \frac{p}{n}\in(1,\infty))$:} $\lim_{n,p\to\infty} R(\hat{\beta}^{\mathrm{OLS}}) = \sigma^2\frac{1}{\gamma-1}$ 
 
 \section*{PAC learning}
 \subsection*{Function of interest}
