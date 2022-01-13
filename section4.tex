@@ -1,13 +1,3 @@
-\section*{Numerical Est. Techinques}
-\textbf{Setting}: Estimate$\hat{f}(x) \in \mathcal{F}$ with minimal prediction error.
-
-\subsection*{Bootstrapping}
-Bootstrap samples: $\mathcal{Z}^*=\{\mathcal{Z}_1^*, \cdots\mathcal{Z}_B^*\}$, of same size as original, drawn with replacement.
-The chance of a sample to have appeared in the bootstrap is:\\
-$1-(1-\frac{1}{n})\stackrel{n\to\infty}{\to} 1-\frac{1}{e}\approx 0.632$. So if we compute the ERM on $\mathcal{Z}$ we could get 63\% accuracy by memorization. Over-confident!\\
-\textbf{Leave-one-out}: compensates by computing the ERM where no memorization was for specific sample. E.g., for classification, like cross-validation:\\
-$\hat{\mathcal{R}}(S(\mathcal{Z}))=\frac{1}{B}\sum_{b=1}^B\sum_{z_i\not\in\mathcal{Z}^{*b}}\frac{\mathbb{I}_{c(x_i)\neq y_i}}{B-\lvert\mathcal{Z}^{*b}\rvert}$
-
 \section*{Model selection}
 \textbf{Bayesian Information Criterion}\\
 $\mathbf{BIC}=-\log\mathbb{P}(\mX, \rvy|\vw^*)+\frac{d}{2}\log(N)$ where $N=\mathrm{len}(\mX)$, $d=\mathrm{len}(\vw^*)$, $\vw^*=MLE(\vw)$. Prefer smaller BIC. Tendency to underfit.\\

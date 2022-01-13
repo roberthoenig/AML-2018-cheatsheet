@@ -1,37 +1,16 @@
 \section*{Neural Networks}
-% \subsection*{Multi Layer Perceptron}
-% $\{x_j\}_{j=1}^J$ input, $\{y_i\}_{i=1}^I$ output\\
-% $\{z_k^l\}_{k=1}^{K(l)}$ hidden nodes in layer $l$ $1{\leq}l{\leq}L$\\
-% $w_mk^l$ weights from $z_k^{l-1}$ to $z_m^l$\\
-% $w_ik^{L+1}$ weights from $z_k^L$ to output $y_i$\\
-% $z_k^l=h(a_k^l)=h(\sum_{m=1}^{K(l-1)}w_{km}^lz_m^{l-1})$\\
-% $y_i=\sigma(a_i^{L+1})=h(\sum_{m=1}^{K(l-1)}w_{im}^{L+1}z_m^{L})$\\
-% $\mathcal{L}(\hat{y}(\mathbf{W}, \mathbf{X}), y){=}\sum_{n=1}^N\mathcal{L}_n(\hat{y}(\mathbf{W},\mathbf{X}_n),Y_n)$\\
-% $L=0$ or $h(a)=a$ $\Rightarrow$ multiple lin. reg.
-% Layers $\Rightarrow$ generaliz. \& simplicity.\\
-% Model data generating mechanism.
-
-% \textbf{Backpropagation}\\
-% Effic. evaluation of loss derivative:\\
-% $\frac{\vartheta\mathcal{L}_n}{\vartheta w_{ik}^{L+1}}{=}\delta_i^{L+1}z_k^L \quad \frac{\vartheta\mathcal{L}_n}{\vartheta w_{mk}^{l}}{=}\delta_m^{l}z_k^{l-1}$\\
-% $\delta_i^{L+1}{=}(\hat{y_i}{-}y_i)\sigma'(\sum_{m=1}^{K(L)}w_{im}^{L+1}z_m^L)$
-% $\delta_m^{l}{=}(\sum_{r=1}^{K(l+1)}\delta_r^{l+1}w_{rm}^{l+1})\cdot$\\$\quad h'(\sum_{r=1}^{K(l-1)}w_{mr}^lz_r^{l-1})$\\
-% $w_{ij}^{l}\leftarrow w_{ij}^{l}+\eta\delta_i^lz_j^{(l-1)}$
-\subsection*{Regularizazion}
-Avoid overfitting on complex nets.
-\textbf{Early Stopping} separate data into train/error/validation sets.\\
-\textbf{Drop Out} Combine thinned nets with removed nodes.\\
-\textbf{Bayesian} priors on $w$'s
-
-\subsection*{Convolutional Neural Network}
-Modelling invariance.
-Convolutional Layers (filters on a region) \& Pooling Layers (aggregate nodes together).
-
-\subsection*{Autoencoder: explicit density}
-Data compression purposes, Output should reproduce input.$\Rightarrow$ PCA. \textit{Denoising autoencoders} reproduce data from partial observations (blanking out parts of input), more robust.
-
-\subsection*{GAN: implicit density}
-Sample from noise $\to$ training data. 2-player game: generator network fools discriminator by creating fake images, discriminator distinguishes between real and fake images. Gen: upsampling network with fractionally strided convs, Disc: convolutional network.
+\textbf{Universal Approximation:} Any cont. $f:\mathbb{R}^n\to\mathbb{R}^p$ can be unif. approx. on comp. supp. $\mathcal{K}$ by NN with 1 hidden layer: $g_k(x)=\sigmoid(\alpha_k+\sum_{j\to k}w_{jk}\sigma(\alpha_j+\sum_{i\to j} w_{ij}x_i))$.\\
+\textbf{Robbins-Monro:} If $\E[\gamma]=0$, $\E[\gamma^2]=\sigma^2$, $(\theta-\theta^*)l(\theta) > 0$, $\exists b.\,l<b$, $\sum\eta(t) = \infty$, $\sum\eta(t)^2 < \infty$, then
+$\theta^{(t)}\overset{\mathcal{L}^2}{\to}\theta^*$ where
+$\theta^{(t+1)} = \theta^{(t)} - \eta(t)(\theta^{(t)}+\gamma^{(t)})$.
+\textbf{Representation Learning with InfoMax:} Find $\argmax_\theta I(X;Z) \approx \frac{1}{M}\sum_i\E_{Z|x_i}[\log p(x_i|Z)]$. \emph{Problem: Not robust --- $f_\theta:\mathcal{X}\to\mathcal{Z}$ becomes inj.}\\
+\textbf{VAEs:} \emph{Latent vars.} $Z\sim p_\theta(z)$ (Prior)\\
+\emph{Encoder} $p_\theta(x|z)$ (Likelihood)\\
+\emph{Decoder} $p_\theta(z|x)\approx q_\phi(z|x)$ (Posterior).\\
+\emph{\textbf{Training:}} $\max_{\theta,\phi} {\color{gray}\log p_\theta(x_i) \geq}$\\$ \mathcal{L}(x_i,\theta,\phi) = \mathrm{ELBO} = \E_{z\sim q_\phi}[$\\$\log p_\theta(x_i|z)] - D_{\mathrm{KL}}(q_\phi(z|x_i)||p_\theta(z|x_i))$.\\
+\textbf{GANs:} Solve $\min_G\max_D\E[\log(D(x))] + \E[\log(1-D(G(Z)))]$. (Latent vars $Z$.)\\
+\emph{\textbf{Training:}} Alternate between GD on $\min_G(\dots)$ and GA on $\max_D(\ldots)$.\\
+\emph{\textbf{Stability:}} Change GD on $\E[\log 1-D(G(Z))]$ to GA on $\E[\log D(G(Z))]$.
 
 % \subsection*{Boltzmann Machine}
 % Symmetric coupling. Visible and Hidden units. Update through voting of neighboors. Find the weights which generate a defined activity of visible nodes.
