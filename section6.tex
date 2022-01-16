@@ -43,10 +43,26 @@ $\mathbb{P}[2\sup_{c\in\mathcal{C}}\lvert \hat{\mathcal{R}}_n(c) - \mathcal{R}(c
 Shattering $s(\mathcal{A},n)$ is the score... For half-planes $s(\mathcal{A},2)=4$, $s(\mathcal{A},3)=8$, \dots. For triangles $s(\mathcal{A},2)=4,s(\mathcal{A},3)=8,s(\mathcal{A},4)=16$, powers.
 
 \section*{Nonparametric Bayesian methods}
-$\text{Beta}(x|a,b)=B(a,b)^{-1} x^{a-1}(1-x)^{b-1}$: prob. of Bernoulli proc. after observing $a-1$ success and $b-1$ failures. Expended to multivariate case with Dirichlet distr. That will give multivar. probs, \textit{based on finite} counts! But we don't know exactly which multivar. distribution works. With more data, we update the Dirichlet distribution. Is a conjugate prior.\\
-\textbf{Stick-breaking Dirichl. proc.}. Repeatedly draw from $\text{Beta}(x|1,\alpha)$ with fixed $\alpha$, but from reducing stick: $\rho_k=\beta_k(1-\sum_{i=1}^{k-1}\rho_i)$. The prior:\\
-$\mathbb{P}[z_i=k|z_{-i},\alpha]=\begin{cases}\frac{N_{k,-i}}{\alpha+N-1} & \text{exist. }K \\ \frac{\alpha}{\alpha+N-1} & \text{oth.}\end{cases}$. Final Gibbs sampler:\\
-$\mathbb{P}[z_i=k|z_{-i},\alpha,\mu]=\begin{cases}\frac{N_{k,-i}}{\alpha+N-1}p(x_i|x_{-i,k},\mu) & \text{exist. }K \\ \frac{\alpha}{\alpha+N-1}p(x_i,\mu) & \text{oth.}\end{cases}$
+\textbf{Conjugate prior:} For parametric fam. $\mathcal{F}$, prior $p(\theta)\in\mathcal{F}$ is conj. for lik. $p(x|\theta)$ if $p(\theta|x)\in\mathcal{F}$.
+\emph{Example (\textbf{NIW}):} Prior $\mathbf{\mu},\mathbf{\Sigma}\sim\mathrm{NIW}(m_0,K_0,v_0,S_0)$, Likelihood
+$p(\mX|\mathbf{\mu},\mathbf{\Sigma}) = \prod_i \mathcal{N}(\rvx_i|\mathbf{\mu},\mathbf{\Sigma})$.
+Posterior $\mathbf{\mu},\mathbf{\Sigma}|X\sim\mathrm{NIW}(m_p,K_p,v_p,S_p)$.\\
+\mbox{\textbf{Semi-conjugate prior:} $\mathbf{\mu}\sim\mathcal{N}(m_0,V_0)$,}\\$\mathbf{\Sigma}\sim\mathrm{IV}(v0,S_0^{-1})$ is semi-conj. for lik. $p(\mX|\mathbf{\mu},\mathbf{\Sigma}) = \prod_i \mathcal{N}(\rvx_i|\mathbf{\mu},\mathbf{\Sigma})$ coz $\mathbf{\mu}|\mathbf{\Sigma},\mX\sim\mathcal{N}(m_p,V_p)$ and $\mathbf{\Sigma}|\mathbf{\mu},\mX\sim\mathrm{IV}(v_p,S_p^{-1})$.\\
+\textbf{Gibbs sampling:} Given $\Theta^{(0)} = [\theta^{(0)}_0\ldots\theta^{(0)}_k]$, sample $\theta_j^{(t+1)}\sim p(\cdot|\Theta_{-j})$.\\
+\textbf{\emph{Collapsed} Gibbs sampling:} marginalize out $\theta_i$: $\theta_j^{(t+1)}\sim p(\cdot|\Theta_{-i,j})$ \emph{Reduces variance --- Rao-Blackwellization}\\
+\textbf{MCMC:} Sample from $p(\theta)$ using MC $\pi$ satisfying
+(1) irreducibility, (2) aperiodicity, (3) $\pi(\theta'|\theta)p(\theta) = \pi(\theta|\theta')p(\theta)$.
 
-\subsection*{Gibbs sampling}:\\
-Init: assign all data to a cluster, with prior $\pi_i$, with $\sum_{k=1}^K\pi_i<1$ (s.t. new clusters possible). E.g. with stick-breaking. Then remove $x$ from $k$ and compute new $\theta_k$, then compute Gibbs sampler prob. (CRP), and sample the new cluster assignment $z_i\sim p(z_i|x_{-i},\theta_k)$. If cluster is empty, remove it and decrease $K$.
+\textbf{d-separation:} \emph{Given:} Observed RVs $Z$.
+RVs $A$, $B$ are d-separated along path $p$ if p contains
+any pattern of {\color{red}add}:\\\\
+
+$A \bot B | Z$ if $A$, $B$ are d-separated along every path.
+
+\subsection*{Nonparametric GMMs}
+\emph{Three equivalent formalizations:}\\
+\textbf{GEM:} Semi-conj. prior $\forall k\in\mathbb{N}.\,\mu_k,\Sigma_k\sim\mathrm{NIW}(\ldots)$, $\pi\sim\mathrm{GEM}(\alpha > 0)$, $\forall i\leq N.\,z_i\sim\pi$.
+GEM defined by stick-breaking process $\beta_i\sim B(1,\alpha)$, $\pi_i\sim\beta_i\prod_{j<i}(1-\beta_j)$.\\
+\textbf{CRP:} $\rvz\sim\mathrm{CRP}(\alpha)$, $P(z_{n+1}=k|z_{1:n})= \frac{\alpha}{\alpha+n-1} {\color{black}\textrm{ if }} k=(\max z_i+1) {\color{black}\mathrm{ else }} \frac{\#\{j:z_j=k\}}{\alpha+n-1}$. Expected \# of clusters: $O(\alpha\log(n)$. $(z_i)$'s exchangeable! 
+\textbf{Dirichlet Process:} $f\sim\mathrm{DP}(\mathrm{NIW}(\ldots),\alpha) {\color{black}\implies} $
+$f(\mu,\Sigma)=\sum_{k\geq1}\pi_k\mathbf{1}_{(\mu_k,\Sigma_k)=(\mu,\Sigma)}$ where $\pi\sim\mathrm{GEM}(\alpha)$ and $(\mu_k,\Sigma_k)\sim\mathrm{NIW}(\ldots)$.
