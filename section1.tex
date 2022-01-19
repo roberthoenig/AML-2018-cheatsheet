@@ -24,8 +24,13 @@ $f(\vw) \approx f(\hat\vw) + (\vw - \hat\vw)^T \nabla f(\hat\vw) + \frac{1}{2}(\
 \subsection*{Laplace's method}
 $p(\rvw) \propto \exp(-R(\rvw))$ where $R(\rvw) = -\log(p(\rvw))$\\ $\approx R(\rvw^*) - \frac{1}{2}(\rvw-\rvw^*)^TH_R(\rvw^*)(\rvw-\rvw^*)$\\ with $\rvw^* = \argmin_\rvw R(\rvw)$. Thus, $p(\rvw) \approx \mathcal{N}(\rvw;\rvw^*, H_R^{-1}(\rvw^*))$.
 
-\subsection*{\textcolor{red}{Chebyshev}}
+\subsection*{Chebyshev's inequality}
 $\mathbb{P}(|X-\mathbb{E}[X]|\geq \epsilon)\leq \frac{\mathbb{V}[X]}{\epsilon^2}$\\
+
+\subsection*{Hoeffding's inequality}
+For ind. $(X_i)$ with $a_i\leq X_i\leq b_i$, $S_n=\sum_{i\leq n}X_i$, we have $P(S_n-\E S_n\geq t)$,l $P(\E S_n - S_n \geq t)$ $\leq \exp(-\frac{2t^2}{\sum(b_i-a_i)^2})$.\\
+
+\textbf{Other inequalities:} $1-x \leq e^{-x}$\quad
 
 \subsection*{Matrix Calculus}
 $\frac{\partial \mathbf{a}^T\mathbf{x}}{\partial\mathbf{x}}{=}\mathbf{a} \quad \frac{\partial \mathbf{a}^T\mathbf{Xb}}{\partial\mathbf{X}}{=}\mathbf{ab}^T \quad \frac{\partial \mathbf{a}^T\mathbf{X}^T\mathbf{b}}{\partial\mathbf{X}}{=}\mathbf{ba}^T $\\

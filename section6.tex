@@ -24,23 +24,28 @@ With $p\geq 1-\delta$ $\bar{b}^{(M)} \leq O(\frac{1}{n}\frac{1}{\mu^2}\log|\math
 \emph{\textbf{spiky interpolation}} + \emph{\textbf{self-averaging}} (multiple models cancel out each others noise). \emph{\textbf{Double descent:}} \emph{Underparam. ($\gamma = \frac{p}{n}\in(0,1))$:} $\lim_{n,p\to\infty} R(\hat{\beta}^{\mathrm{OLS}}) = \sigma^2\frac{\gamma}{1-\gamma}$ \emph{Overparam. ($\gamma = \frac{p}{n}\in(1,\infty))$:} $\lim_{n,p\to\infty} R(\hat{\beta}^{\mathrm{OLS}}) = \sigma^2\frac{1}{\gamma-1}$ 
 
 \section*{PAC learning}
-\subsection*{Function of interest}
-The probability of large excess error:\\
-$\mathbb{P}[\hat{c}_N(X)\neq c^\text{Bayes}(X)|\mathcal{Z}]<\delta$.\\
-But: could be unlucky with $\mathcal{Z}$, $c^\text{Bayes}$ not in hypoth. class, $\mathbb{P}[\dots]$ is a r.v., not scalar quality measure. Strat: average.
-$\mathbb{P}[\mathcal{R}(\hat{c})-\inf_{c\in\mathcal{C}}\mathcal{R}(c)>\epsilon]<\delta$. Where $\mathcal{R}[\hat{c}]$ is the generalization error of the trained class., should not exceed the min. generalization error achievable by more than $\epsilon$.
-Leads to:\\
-$\sum_{c\in\mathcal{C}}\mathbb{P}[\lvert \hat{\mathcal{R}}_n(c)-\mathcal{R}(c)\rvert>\epsilon]\leq 2Ne^{-2n\epsilon^2}$. Def RHS$=\delta$: $\epsilon=\sqrt{\frac{\log N - \log(\delta/2)}{2n}}$. For $N$ the size of hypothesis class, and for $n$ the num. of samples. The expected error of $c$ thus depends on $1/\sqrt{n}$ and $\log N$!
-\subsection*{Rectangle learning}
-Pick tight rectangle. Diff. between picked rectangle $\hat{R}$ and true $R$ with few examples. Rectangles are \textbf{efficiently PAC learnable}: runs in polynom. $1/\epsilon$ (error param.) and $1/\delta$ (confidence val.).
-\subsection*{Hyperplane learning}
-Hypothesis: $\sum_{i=1}^d a_ix_i + a_0$ (all possible hyperplanes through $d$-dim vector) has \#-of-possible-classifiers $2\binom{n}{d}$. In class: the classifiers $c$ and $\hat{c}$ differ for no more than $d$ data points on a plane, IF found with ERM: $\forall_{c\in\mathcal{C}} \hat{\mathcal{R}}_n(c) \geq \hat{\mathcal{R}}_n(\hat{c}) - \frac{d}{n}$.
-\subsection*{VC dimension}
-How effectively a classifier (e.g., interval, unions of intervals, circles) can select subsets. Classifying with a closed iterval: $V_C=2$, for you cannot select the begin-point and end-point but not middle point! For unions, $V_c=2k$, for unit circles $V_c=3$, for finite-dimensional vector space $V_c\leq\dim(\mathcal{G})$.
-\subsection*{From practical}
-$\mathcal{R}_n(\hat{c})-\inf_{c\in\mathcal{C}}\mathcal{R}(c) \leq 2\sup_{c\in\mathcal{C}}\lvert \hat{\mathcal{R}}_n(c) - \mathcal{R}(c) \rvert$ for any class $\mathcal{C}$. Finite class:
-$\mathbb{P}[2\sup_{c\in\mathcal{C}}\lvert \hat{\mathcal{R}}_n(c) - \mathcal{R}(c) \rvert>\epsilon]\leq 2\lvert\mathcal{C}\rvert e^{-2n\epsilon^2}$.
-Shattering $s(\mathcal{A},n)$ is the score... For half-planes $s(\mathcal{A},2)=4$, $s(\mathcal{A},3)=8$, \dots. For triangles $s(\mathcal{A},2)=4,s(\mathcal{A},3)=8,s(\mathcal{A},4)=16$, powers.
+Consider risk $\mathcal{R}(c) = P(c(X)\neq Y)$.
+\textbf{Strong PAC learnability:}
+For instance space $\mathcal{X}$, algorithm $\mathcal{A}$ can learn concept class
+$\mathcal{C}\subset\mathcal{P}(\mathcal{X})$ from hypothesis class $\mathcal{H}\subset\mathcal{P}(\mathcal{X})$ if $\exists\mathrm{poly}(\cdot,\cdot,\cdot)$ s.t.
+$\forall$dists $\mathcal{D}$ on $\mathcal{X}\times\{0,1\}$, $\forall 0<\epsilon<\frac{1}{2}$, $0<\delta<\frac{1}{2}$, $\forall Z=\{(X_i,Y_i)\}\sim\mathcal{D}$ with $n\geq\mathrm{poly}(\frac{1}{\epsilon},\frac{1}{\delta},\mathrm{size}(c))$, $\hat{c} = \mathcal{A}(Z)\in\mathcal{H}$ satisfies $P_Z(\mathcal{R}(\hat{c})-\inf_{c\in\mathcal{C}}\mathcal{R}(c)\leq\epsilon) \geq 1-\delta$.
+\textbf{Efficient PAC learnability:} $\mathcal{A}$ runs in $O(\mathrm{poly}(\frac{1}{\delta},\frac{1}{\epsilon}))$.\\
+\textbf{Weak PAC learnability:} Allow ``larger'' non-trivial $\epsilon$, e.g. only req. $\epsilon < \frac{1}{2}$.
+
+\textbf{VC-dimension:} $A\subset\mathcal{X}$ can be \textbf{shattered} by $\mathcal{C}$ if $\forall S\subset A.\, \exists c\in\mathcal{C}.\, c\cap A = S$.
+\textbf{VC}($\mathcal{C}$) = max $n$ s.t. $\exists A\subset\mathcal{X}$ with $|A|=n$ and $\mathcal{C}$ shatters $|A|$. 
+
+\textbf{VC-Theorem:} Let $c^* = \argmin_{c\in\mathcal{C}}(c)$. Then, $\mathcal{R}(\hat{c}^*_n) - \mathcal{R}(c^*)  = \mathcal{R}(\hat{c}^*_n) - \mathcal{R}_n(\hat{c}^*_n) + \mathcal{R}_n(\hat{c}^*_n) - \mathcal{R}(c^*) \leq 2\sup_c|\mathcal{R}(c)-\mathcal{R}_n(c)|$.
+
+\textbf{Bayes error:} $\inf_{f\in\mathcal{X}\to\{0,1\}}\mathcal{R}(f)$. For 0/1-loss: $f^*(x) = \argmax_{y\in\{0,1\}}p(y|x)$.
+
+\subsection*{PAC theorems}
+Assume $\mathcal{H} = \mathcal{C}$.\\
+\textbf{(1) Finite-$|\mathcal{C}|$:} For \textbf{consistent hypothesis} $\hat{c}=\mathcal{A}(Z)$, i.e. $\forall Z.\,\mathcal{\hat{R}}(\hat{c},Z)=0$, if $n\geq \frac{1}{\epsilon}(\log\mathcal{H}+\log\frac{1}{\delta})$ then $P(\mathcal{R}(\hat{c}) \leq \epsilon) \geq 1-\delta$.\\
+\textbf{(2) Finite-$|\mathcal{C}|$:} Let $\hat{c}^*_n = \mathrm{ERM}(Z) = \argmin_{c\in\mathcal{C}}\frac{1}{n}\sum_{i\leq n}\mathbf{1}\{c(X_i)\neq Y_i\}$. Then, $P(\mathcal{R}(\hat{c}^*_n) - \inf_{c\in\mathcal{C}}\mathcal{R}(c) > \epsilon) \leq 2|\mathcal{C}|\exp(-2n\epsilon^2)$.\\
+\textbf{(3) VC:} (If $\mathrm{VC}_\mathcal{C}>2$?) then 
+$P(\mathcal{R}(\hat{c}^*_n) - \inf_{c\in\mathcal{C}}\mathcal{R}(c) > \epsilon) \leq 9n^{\mathrm{VC}_\mathcal{C}}\exp(-\frac{n\epsilon^2}{32})$.\\
+\textbf{Hyperplane learning:} Reduce inf. set of hypotheses $\sum_{i\leq d}(a_i x_i + a_0)$ to $\binom{n}{d}$ hyperplanes defined by $P\subset Z$ points with $|P| = d$. \emph{Theorem:} If $n\geq d$, $2\frac{d}{n}\leq\epsilon$, then $P(\mathcal{R}(\hat{c}^*_n)-\inf_{c\in\mathcal{C}}\mathcal{R}(c)>\epsilon) \leq \epsilon^{2d\epsilon}(2\binom{n}{d}+1)\exp(-\frac{n\epsilon^2}{2})$.
 
 \section*{Nonparametric Bayesian methods}
 \textbf{Conjugate prior:} For parametric fam. $\mathcal{F}$, prior $p(\theta)\in\mathcal{F}$ is conj. for lik. $p(x|\theta)$ if $p(\theta|x)\in\mathcal{F}$.
