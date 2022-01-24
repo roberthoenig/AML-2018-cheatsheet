@@ -34,26 +34,24 @@ For ind. $(X_i)$ with $a_i\leq X_i\leq b_i$, $S_n=\sum_{i\leq n}X_i$, we have $P
 
 \subsection*{Matrix Calculus}
 $\frac{\partial \mathbf{a}^T\mathbf{x}}{\partial\mathbf{x}}{=}\mathbf{a} \quad \frac{\partial \mathbf{a}^T\mathbf{Xb}}{\partial\mathbf{X}}{=}\mathbf{ab}^T \quad \frac{\partial \mathbf{a}^T\mathbf{X}^T\mathbf{b}}{\partial\mathbf{X}}{=}\mathbf{ba}^T $\\
-$\frac{\partial \mathbf{a}^T\mathbf{Xa}}{\partial\mathbf{a}}{=}\mathbf{a}^T(\mathbf{X}+\mathbf{X}^T)$,$\frac{\partial \mathbf{K}^{-1}}{\partial K}=-\mathbf{K}^{-1}\mathbf{K}'\mathbf{K}^{-1}$\\
+$\frac{\partial \mathbf{a}^T\mathbf{Xa}}{\partial\mathbf{a}}{=}\mathbf{a}^T(\mathbf{X}+\mathbf{X}^T)$,$\frac{\partial |\mA|}{\partial \mA}{=}|\mA|\mA^{-T}$\\
  $\frac{\partial}{\partial\mathbf{x}} \mathbf{f(x)}^T\mathbf{g(x)}{=}\mathbf{f(x)}^T\frac{\partial \mathbf{g(x)}}{\partial\mathbf{x}}+\mathbf{g(x)}^T\frac{\partial\mathbf{f(x)}}{\partial\mathbf{x}}$\\
-$\mathbf{X}^T\mathbf{X}$: invertible if no no zero eigenvalues.
-Inversion unstable if ratio from $\mathbf{X}$'s smallest EV to the largest is big.
 
-\section*{Representations}
-\subsection*{Taxonomy of data}
-\textbf{Object space} $\mathcal{O}$. \textbf{Data space} $\mathcal{K}$.
+% \section*{Representations}
+% \subsection*{Taxonomy of data}
+% \textbf{Object space} $\mathcal{O}$. \textbf{Data space} $\mathcal{K}$.
 
-\textbf{Measurement} $X:\mathcal{O}^{(1)}\times\cdots\times\mathcal{O}^{(R)} \rightarrow \mathcal{K}$.
+% \textbf{Measurement} $X:\mathcal{O}^{(1)}\times\cdots\times\mathcal{O}^{(R)} \rightarrow \mathcal{K}$.
 
-\textbf{Features} derived from msrmnts.
+% \textbf{Features} derived from msrmnts.
 
-\textbf{Monadic}: $\mathcal{O}^{(1)} \rightarrow \mathbb{R}^D$ (vectorial)
+% \textbf{Monadic}: $\mathcal{O}^{(1)} \rightarrow \mathbb{R}^D$ (vectorial)
 
-\textbf{Dyadic}: $\mathcal{O}^{(1)}\times\mathcal{O}^{(2)} \rightarrow \mathbb{R}$ (similarity)
+% \textbf{Dyadic}: $\mathcal{O}^{(1)}\times\mathcal{O}^{(2)} \rightarrow \mathbb{R}$ (similarity)
 
-\textbf{Polyadic}: $\mathcal{O}^{(1)}\times\mathcal{O}^{(2)}\times\mathcal{O}^{(3)} \rightarrow \{-1, 0, 1\}$ (preference)
+% \textbf{Polyadic}: $\mathcal{O}^{(1)}\times\mathcal{O}^{(2)}\times\mathcal{O}^{(3)} \rightarrow \{-1, 0, 1\}$ (preference)
 
-\subsection*{Scales}
+\section*{Scales}
 
 Characterized by invariance transformation $f: \mathbb{R} \rightarrow \mathbb{R}$
 
@@ -92,7 +90,7 @@ Consistent, asymptotically normal, asymptotically efficient.
 Given prior $\mathbb{P}(\theta)$, likelihood $\mathbb{P}(\mathcal{X}|\theta)$:\\  MAP estimate $\hat{\theta}\in \argmax_\theta P(\theta|\mathcal{X})$\\ $=\argmax_\theta P(\mathcal{X}|\theta)P(\theta)$\\
 
 \subsection*{Fisher information}
-\textbf{Score} $\Lambda = \frac{\partial}{\partial\theta} \log p(X;\theta)$ | $\E[\Lambda] = 0$\\
+\textbf{Score} $\Lambda = \frac{\partial}{\partial\theta} \log p(X;\theta)$, $\E[\Lambda] = 0$\\
 \textbf{Fisher information} $\mathcal{I}(\theta) = \Var(\Lambda) = \E[\Lambda^2] \overset{(*)}{=}
 -\E[\frac{\partial}{\partial\theta^2} \log p(X;\theta)] = \mathcal{J}(\theta)$
 Generalizes naturally to random vector $\mathbb{\theta}$ using $\Cov$ and $\frac{\partial}{\partial\theta\partial\theta^T}$.
@@ -118,9 +116,9 @@ MLE $\myhat{\theta} = \mathbf{x}$ has $\E[(\myhat{\theta}_{JS} - \theta_0)^2] \l
 % 
 % 
 \subsection*{Rao-Cramer lower bound}    
-$\E[(\myhat{\theta} - \theta_0)^2] \geq (\frac{\partial}{\partial\theta}(b_{\myhat{\theta}}+1)^2)\mathcal{I}(\theta)^{-1} + b_{\myhat{\theta}}^2$\\
+$\E[(\myhat{\theta} - \theta_0)^2] \geq (\frac{\partial}{\partial\theta_0}b_{\myhat{\theta}}+1^2)\mathcal{I}(\theta)^{-1} + b_{\myhat{\theta}}^2$\\
 Derivation: 
-$\frac{\partial}{\partial\theta}(b_{\myhat{\theta}}+1)^2 = 
+$(\frac{\partial}{\partial\theta_0}b_{\myhat{\theta}}+1)^2 = 
  \E[\Lambda\myhat{\theta}]^2 = \E[\Lambda(\myhat{\theta} - \E[\myhat{\theta}])]^2 \leq \E[\Lambda^2]\E[(\myhat{\theta}-\E[\myhat{\theta}])^2] = \mathcal{I}(\theta)\E[(\myhat{\theta} - \theta_0)^2] + b_{\myhat{\theta}}^2
 $
 

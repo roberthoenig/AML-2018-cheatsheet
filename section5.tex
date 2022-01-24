@@ -22,7 +22,7 @@
 % \end{table}
 
 \subsection*{Probabilistic Generative}
-\textbf{Steps:} Model $p_\theta(X,Y)$ $\rightarrow$ Compute $\myhat\theta = \mathrm{MLE}(\theta)$ $\rightarrow$ Compute $p_{\myhat\theta}(X|Y)$ $\rightarrow$ Probabilistic Discriminative.\\
+\textbf{Steps:} Model $p_\theta(X,Y)$ $\rightarrow$ Compute $\myhat\theta = \mathrm{MLE}(\theta)$ $\rightarrow$ Compute $p_{\myhat\theta}(Y|X)$ $\rightarrow$ Probabilistic Discriminative.\\
 \textbf{Example (Mixture of Gaussians):} $p_\theta(X,Y)=Y\beta\mathcal{N}(X;\mu_1,\Sigma_1)+(1-Y)(1-\beta)\mathcal{N}(X;\mu_0,\Sigma_0)$ $\rightarrow$ $\Sigma_1=\Sigma_0 \& \beta=\frac{1}{2} \implies p(Y|X) = \sigma(\vw^TX + w_0)$ (\textbf{LDA}) else $p(Y|X) = \sigma(X^T\mW X + \vw^TX + w_0)$ (\textbf{QDA})
 \textbf{{\color{red} High Comp. Cost}, {\color{red}High Bias}}
 \subsection*{Probabilistic Discriminative}
@@ -107,14 +107,15 @@ $\vw^* \propto S^{-1}(\bar{x_1}-\bar{x_0})$ where $S = \sum_{c\in\{0,1\}}\sum_{x
 \subsection*{Lagrangian Optimization}
 \textbf{Primal:} Find $\argmin_\vw f(\vw)\\s.t. \forall i,j.\,\,\,g_i(\vw)=0\,\,\,\&\,\,\,h_j(\vw) \leq 0$ for convex $g_i, h_j$.\\
 \textbf{Dual:} Find $\max_{\alpha\geq0,\lambda} {\theta(\lambda, \alpha)}$ with ${\theta(\lambda, \alpha)} = \min_\vw\mathcal{L}(\vw, \lambda, \alpha)$.\\
-\textbf{Lagrangian:} $\mathcal{L}(\vw, \mathbf{\lambda}, \mathbf{\alpha}) = f(\vw) + \sum\lambda_i g_i(\vw) + \sum\lambda_j h_j(\vw)$.\\
-$\mathcal{L}(\vw, \mathbf{\lambda}, \mathbf{\alpha})=0 \implies \vx^*$ solves Primal.\\
-If $f, g_i, h_i$ convex \& \textbf{Slater's condition} holds \mbox{($\exists \vw. \forall i. g_i(\vw)=0\,\,\&\,\,h_j\mathbf{<}0$)} then \textbf{Strong duality} ($\vw^* = \argmin_\vw \mathcal{L}(\vw, \lambda^*, \alpha^*)$) and \textbf{Complementary slackness} ($\alpha^*_jh^*_j(\vw^*) = 0$)
-
+\textbf{Lagrangian:} $\mathcal{L}(\vw, \mathbf{\lambda}, \mathbf{\alpha}) = f(\vw) + \sum\lambda_i g_i(\vw) + \sum\alpha_j h_j(\vw)$.\\
+If $f, g_i, h_i$ convex \& \textbf{Slater's condition} holds \mbox{($\exists \vw. \forall i. g_i(\vw)=0\,\,\&\,\,h_j\mathbf{<}0$)} then \textbf{Strong duality} holds ($\vw^* = \argmin_\vw \mathcal{L}(\vw, \lambda^*, \alpha^*)$ for opt. $\lambda^*, \alpha^*$ from dual) and $\vw^*$ satisies \textbf{KKT} conditions: (1) $\nabla_\rvw\mathcal{L}(\vw^*,\lambda^*,\alpha^*)=0$\\
+(2) $h_j(\vw^*) \leq 0$ \& $g_i(\vw^*) = 0$\\
+(3) $\alpha^*_i \geq 0$\\
+(4) \textbf{Complementary slackness} ($\alpha^*_jh^*_j(\vw^*) = 0$)
 
 \subsection*{Support Vector Machine (SVM)}
 Generalize Perceptron with margin and kernel:
-Find $\max_\vw \mathrm{margin}(\vw) = \max_\vw\min_i y_i(\frac{\vw^T}{||\vw||}\vx_i + w_0)$. Equivalent to \textbf{Primal}: $\min_\vw \frac{1}{2}||\vw||^2\,\,\mathrm{s.t.}\,\, y_i(\vw^Tx_i+w_0) \geq 1$. Get \textbf{Lagrangian} $\mathcal{L}(\vw, \lambda, \alpha) = \frac{1}{2}||\vw||^2 + \sum\alpha_j (1-y_j(\vw^T\vx_j+w_0))$. Solve $\nabla\mathcal{L}=0, \frac{d\mathcal{L}}{dw_0}=0$ to get \textbf{Dual} $\max_\alpha -\frac{1}{2}\sum a_ia_jy_iy_j\vx^T_i\vx_j + \sum\alpha_i$ s.t.
+Find $\max_\vw \mathrm{margin}(\vw) = \max_\vw\min_i y_i(\frac{\vw^T}{||\vw||}\vx_i + w_0)$. Equivalent to \textbf{Primal}: $\min_\vw \frac{1}{2}||\vw||^2\,\,\mathrm{s.t.}\,\, y_i(\vw^Tx_i+w_0) \geq 1$. Get \textbf{Lagrangian} $\mathcal{L}(\vw, \lambda, \alpha) = \frac{1}{2}||\vw||^2 + \sum\alpha_j (1-y_j(\vw^T\vx_j+w_0))$. Solve $\nabla_\rvw\mathcal{L}=0, \frac{d\mathcal{L}}{dw_0}=0$ to get \textbf{Dual} $\max_\alpha -\frac{1}{2}\sum a_ia_jy_iy_j\vx^T_i\vx_j + \sum\alpha_i$ s.t.
 $\alpha_j\geq 0$ \& $\sum a_jy_i = 0$. Solve with \textbf{quadratic optimization}. Optimal $\vw^* = \sum_i \alpha^*_i y_i x_i, w_0^* = -\frac{1}{2}({\vw^*}^T{\vx^+}^T + {\vw^*}^T{\vx^-}^T)$. Complementary slackness $\color{black}\implies$ $\alpha$ sparse.
 \subsection*{Soft Margin SVM}
 Introduce slack to relax constraints.
@@ -142,7 +143,7 @@ Each sample \textbf{y} is assigned to a structured output label $z$\\
 
 
 \subsection*{Kernels}
-\textbf{Definition:} $K$ kernel \emph{iff} $K$ symmetric and $\int f(x)f(y)K(x,y)dx\,dy \geq 0\,\,\forall f\in\mathcal{L}_2$ \emph{iff} every Gram-matrix on K is psd.\\
+\textbf{Definition:} $K$ kernel \emph{iff} $K$ symmetric and $\int f(x)f(y)K(x,y)dx\,dy \geq 0\,\,\forall f\in\mathcal{L}_2$ \emph{iff} every Gram-matrix on K is symmetric psd.\\
 \textbf{Valid Kernels:}
 $K(\mathbf{x},\mathbf{x'}){=}\mathbf{x}^T\mathbf{x'}$\\
 $K(\mathbf{x},\mathbf{x'}){=}\mathrm{exp}(-||\mathbf{x}{-}\mathbf{x'}||_2^2/h^2)$\\
