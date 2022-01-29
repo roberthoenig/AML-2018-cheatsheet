@@ -21,18 +21,15 @@
 % \label{tab:my-table}
 % \end{table}
 
-\subsection*{Probabilistic Generative}
+\subsection*{\color{red}Probabilistic Generative}
 \textbf{Steps:} Model $p_\theta(X,Y)$ $\rightarrow$ Compute $\myhat\theta = \mathrm{MLE}(\theta)$ $\rightarrow$ Compute $p_{\myhat\theta}(Y|X)$ $\rightarrow$ Probabilistic Discriminative.\\
 \textbf{Example (Mixture of Gaussians):} $p_\theta(X,Y)=Y\beta\mathcal{N}(X;\mu_1,\Sigma_1)+(1-Y)(1-\beta)\mathcal{N}(X;\mu_0,\Sigma_0)$ $\rightarrow$ $\Sigma_1=\Sigma_0 \& \beta=\frac{1}{2} \implies p(Y|X) = \sigma(\vw^TX + w_0)$ (\textbf{LDA}) else $p(Y|X) = \sigma(X^T\mW X + \vw^TX + w_0)$ (\textbf{QDA})
-\textbf{{\color{red} High Comp. Cost}, {\color{red}High Bias}}
-\subsection*{Probabilistic Discriminative}
+\subsection*{\color{orange}Probabilistic Discriminative}
 \textbf{Steps:} Model $p(Y|X) = Y\sigma(\vw^TX)+(1-Y)(1-\sigma(\vw^TX))$
 
-\textbf{Example (Logistic Regression):} Solve $\frac{\delta p(tr. set)}{\delta\vw}=0$ with gradient descent (or with Newton's method --- \textbf{Iterative Least Squares Regression})
+\textbf{Example (Logistic Regression):} Max. log lik. $p(Y|X,w)$ with gradient ascent (or with Newton's method --- \textbf{Iterative Least Squares Regression})
 
-\textbf{{\color{orange} Med. Comp. Cost}, {\color{orange}Med. Bias}}
-\subsection*{Discriminative}
-\textbf{{\color{ForestGreen} Low Comp. Cost}, {\color{ForestGreen}Low Bias}}
+\subsection*{\color{ForestGreen}Discriminative}
 
 
 % \subsection*{Loss Functions}
@@ -108,10 +105,11 @@ $\vw^* \propto S^{-1}(\bar{x_1}-\bar{x_0})$ where $S = \sum_{c\in\{0,1\}}\sum_{x
 \textbf{Primal:} Find $\argmin_\vw f(\vw)\\s.t. \forall i,j.\,\,\,g_i(\vw)=0\,\,\,\&\,\,\,h_j(\vw) \leq 0$ for convex $g_i, h_j$.\\
 \textbf{Dual:} Find $\max_{\alpha\geq0,\lambda} {\theta(\lambda, \alpha)}$ with ${\theta(\lambda, \alpha)} = \min_\vw\mathcal{L}(\vw, \lambda, \alpha)$.\\
 \textbf{Lagrangian:} $\mathcal{L}(\vw, \mathbf{\lambda}, \mathbf{\alpha}) = f(\vw) + \sum\lambda_i g_i(\vw) + \sum\alpha_j h_j(\vw)$.\\
-If $f, g_i, h_i$ convex \& \textbf{Slater's condition} holds \mbox{($\exists \vw. \forall i. g_i(\vw)=0\,\,\&\,\,h_j\mathbf{<}0$)} then \textbf{Strong duality} holds ($\vw^* = \argmin_\vw \mathcal{L}(\vw, \lambda^*, \alpha^*)$ for opt. $\lambda^*, \alpha^*$ from dual) and $\vw^*$ satisies \textbf{KKT} conditions: (1) $\nabla_\rvw\mathcal{L}(\vw^*,\lambda^*,\alpha^*)=0$\\
-(2) $h_j(\vw^*) \leq 0$ \& $g_i(\vw^*) = 0$\\
-(3) $\alpha^*_i \geq 0$\\
-(4) \textbf{Complementary slackness} ($\alpha^*_jh^*_j(\vw^*) = 0$)
+\textbf{Slater's condition:} $\exists \vw. \forall i. g_i(\vw)=0\,\,\&\,\,h_j\mathbf{<}0$.
+$f, g_i, h_i$ convex \& Slater's condition are sufficient for \textbf{Strong duality}: $\vw^* = \argmin_\vw \mathcal{L}(\vw, \lambda^*, \alpha^*)$ for opt. $\lambda^*, \alpha^*$ from dual. Also, $\vw^*$ satisfies \textbf{KKT conditions:} (1) $\alpha^*_i \geq 0$\\
+(2) $\nabla_\rvw\mathcal{L}(\vw^*,\lambda^*,\alpha^*)=0$\\
+(3) $h_j(\vw^*) \leq 0$ \& $g_i(\vw^*) = 0$\\
+(4) \textbf{Compl. slackness:} $\alpha^*_jh^*_j(\vw^*) = 0$.
 
 \subsection*{Support Vector Machine (SVM)}
 Generalize Perceptron with margin and kernel:

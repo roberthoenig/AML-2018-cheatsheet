@@ -1,19 +1,15 @@
-\subsection*{Distributions}
 $\normal(x;\mu, \sigma^2)=\sqrt{2\pi\sigma^2}e^{-(x-\mu)^2/(2\sigma^2)}$\\
 $\normal(x;\bm{\mu}, \bm{\Sigma})= |2\pi\bm{\Sigma}|^{-1/2} e^{-\frac{1}{2}(\mathbf{x}-\bm{\mu})^T\bm{\Sigma}^{-1}(\mathbf{x}-\bm{\mu})} $\\
-$\mathrm{Exp}(x|\lambda){=}\lambda e^{-\lambda x}$, $\mathrm{Ber}(x|\theta){=}\theta^x (1{-}\theta)^{(1-x)}$
-$\mathrm{Dir}(\pi|\alpha) = \frac{1}{B(\alpha)}\prod_{i\leq n}\pi_i^{\alpha_i-1}$.
+$\mathrm{Exp}(x|\lambda){=}\lambda e^{-\lambda x}$\\ $\mathrm{Ber}(x|\theta){=}\theta^x (1{-}\theta)^{(1-x)}$\\
+$\mathrm{Dir}(\pi|\alpha) = \frac{1}{B(\alpha)}\prod_{i\leq n}\pi_i^{\alpha_i-1}$
 \subsection*{Conditional Gaussians}
 \textbf{Given:} $X_V \sim N(\mu_V, \Sigma_{VV})$, $V=A\cupdot B$\\
 \textbf{Then:} $P(X_A|X_B=x_B)=N(\mu_{A|B}, \Sigma_{A|B})$\\
 $\mu_{A|B}=\mu_A+\Sigma_{AB}\Sigma^{-1}_{BB}(x_B-\mu_B)$\\
 $\Sigma_{A|B}=\Sigma_{AA}-\Sigma_{AB}\Sigma^{-1}_{BB}\Sigma_{BA}$
 
-\subsection*{Functions}
+\subsection*{Sigmoid}
 $\sigma(x)=\frac{1}{1+e^{-x}}$, $\sigma'(x)=\sigma(x)(1-\sigma(x))$
-
-\subsection*{Modes of Convergence}
-$X_n \overset{p}{\to} X \coloneqq P(|X_n-X|>\epsilon){\to} 0 \,\,\,\,\forall \epsilon > 0$.
 
 \subsection*{Robbins-Monro Conditions}
 (1) $\sum\eta(t) = \infty$ and (2) $\sum\eta(t)^2 < \infty$
@@ -22,10 +18,10 @@ $X_n \overset{p}{\to} X \coloneqq P(|X_n-X|>\epsilon){\to} 0 \,\,\,\,\forall \ep
 $f(\vw) \approx f(\hat\vw) + (\vw - \hat\vw)^T \nabla f(\hat\vw) + \frac{1}{2}(\vw-\hat\vw)^TH_f(\hat\vw)(\vw-\hat\vw)$
 
 \subsection*{Laplace's method}
-$p(\rvw) \propto \exp(-R(\rvw))$ where $R(\rvw) = -\log(p(\rvw))$\\ $\approx R(\rvw^*) - \frac{1}{2}(\rvw-\rvw^*)^TH_R(\rvw^*)(\rvw-\rvw^*)$\\ with $\rvw^* = \argmin_\rvw R(\rvw)$. Thus, $p(\rvw) \approx \mathcal{N}(\rvw;\rvw^*, H_R^{-1}(\rvw^*))$.
+\mbox{$R(\rvw) = -\log p(\rvw)$, $p(\rvw) \propto \exp(-R(\rvw))$}\\ $\approx R(\rvw^*) - \frac{1}{2}(\rvw-\rvw^*)^TH_R(\rvw^*)(\rvw-\rvw^*)$\\ with $\rvw^* = \argmin_\rvw R(\rvw)$. Thus, $p(\rvw) \approx \mathcal{N}(\rvw;\rvw^*, H_R^{-1}(\rvw^*))$.
 
-\subsection*{Chebyshev's inequality}
-$\mathbb{P}(|X-\mathbb{E}[X]|\geq \epsilon)\leq \frac{\mathbb{V}[X]}{\epsilon^2}$\\
+% \subsection*{Chebyshev's inequality}
+% $\mathbb{P}(|X-\mathbb{E}[X]|\geq \epsilon)\leq \frac{\mathbb{V}[X]}{\epsilon^2}$\\
 
 \subsection*{Hoeffding's inequality}
 For ind. $(X_i)$ with $a_i\leq X_i\leq b_i$, $S_n=\sum_{i\leq n}X_i$, we have $P(S_n-\E S_n\geq t)$,l $P(\E S_n - S_n \geq t)$ $\leq \exp(-\frac{2t^2}{\sum(b_i-a_i)^2})$.\\
@@ -33,9 +29,13 @@ For ind. $(X_i)$ with $a_i\leq X_i\leq b_i$, $S_n=\sum_{i\leq n}X_i$, we have $P
 \textbf{Other inequalities:} $1-x \leq e^{-x}$\quad
 
 \subsection*{Matrix Calculus}
-$\frac{\partial \mathbf{a}^T\mathbf{x}}{\partial\mathbf{x}}{=}\mathbf{a} \quad \frac{\partial \mathbf{a}^T\mathbf{Xb}}{\partial\mathbf{X}}{=}\mathbf{ab}^T \quad \frac{\partial \mathbf{a}^T\mathbf{X}^T\mathbf{b}}{\partial\mathbf{X}}{=}\mathbf{ba}^T $\\
+$\frac{\partial \mathbf{a}^T\mathbf{x}}{\partial\mathbf{x}}{=}\mathbf{a}^T \quad \frac{\partial \mathbf{a}^T\mathbf{Xb}}{\partial\mathbf{X}}{=}\mathbf{ab}^T \quad \frac{\partial \mathbf{a}^T\mathbf{X}^T\mathbf{b}}{\partial\mathbf{X}}{=}\mathbf{ba}^T $\\
 $\frac{\partial \mathbf{a}^T\mathbf{Xa}}{\partial\mathbf{a}}{=}\mathbf{a}^T(\mathbf{X}+\mathbf{X}^T)$,$\frac{\partial |\mA|}{\partial \mA}{=}|\mA|\mA^{-T}$\\
- $\frac{\partial}{\partial\mathbf{x}} \mathbf{f(x)}^T\mathbf{g(x)}{=}\mathbf{f(x)}^T\frac{\partial \mathbf{g(x)}}{\partial\mathbf{x}}+\mathbf{g(x)}^T\frac{\partial\mathbf{f(x)}}{\partial\mathbf{x}}$\\
+%  $\frac{\partial}{\partial\mathbf{x}} \mathbf{f(x)}^T\mathbf{g(x)}{=}\mathbf{f(x)}^T\frac{\partial \mathbf{g(x)}}{\partial\mathbf{x}}+\mathbf{g(x)}^T\frac{\partial\mathbf{f(x)}}{\partial\mathbf{x}}$\\
+
+\subsection*{Loss Functions}
+\textbf{Hinge:} $\mathcal{L}(y,\rvw^T\rvx) = \max(1-y\rvw^T\rvx, 0)$.
+\textbf{Logistic:} $\mathcal{L}(y,p) = -(y\log p + (1-y)\log (1-p))$.
 
 % \section*{Representations}
 % \subsection*{Taxonomy of data}
@@ -61,9 +61,9 @@ Characterized by invariance transformation $f: \mathbb{R} \rightarrow \mathbb{R}
 
 \textbf{Interval}: differences, $f(x) = ax + b$.
 
-\textbf{Ratio}: diff \& meaningful 0, $f(x) = ax$.
+\textbf{Ratio}: diff\&meaningful 0, $f(x) = ax$.
 
-\textbf{Absolute}: all values meaningful, $f(x) = x$. 
+\textbf{Abs.}: all values meaningful, $f(x) = x$. 
 
 \section*{Risk}
 Conditional Expected Risk (RV)\\
@@ -73,11 +73,11 @@ $R(f) = \mathbbm{E}_{X}[R(f,X)] = \E[\mathcal{L}(Y, f(X))]$.
 
 % \subsection*{Empirical Risk}
 % Training error:\\
-Data $Z^\text{train}={(X_1,Y_1),...,(X_n,Y_n)}$ \\
-Empirical Risk (Training error):\\
-$\hat{R}(\hat{f}, Z^{train}) = \frac{1}{n} \sum_{i=1}^n \mathcal{L}(Y_i, \hat{f}(X_i))$\\
-Empirical Risk Minimizer (ERM) $\hat{f}$:\\
-$\hat{f} \in \argmin_{f \in \mathcal{C}} \hat{R}(\hat{f}, Z^{train})$\\
+% Data $Z^\text{train}={(X_1,Y_1),...,(X_n,Y_n)}$ \\
+% Empirical Risk (Training error):\\
+% $\hat{R}(\hat{f}, Z^{train}) = \frac{1}{n} \sum_{i=1}^n \mathcal{L}(Y_i, \hat{f}(X_i))$\\
+% Empirical Risk Minimizer (ERM) $\hat{f}$:\\
+% $\hat{f} \in \argmin_{f \in \mathcal{C}} \hat{R}(\hat{f}, Z^{train})$\\
 
 \section*{Estimation theory}
 
@@ -116,7 +116,7 @@ MLE $\myhat{\theta} = \mathbf{x}$ has $\E[(\myhat{\theta}_{JS} - \theta_0)^2] \l
 % 
 % 
 \subsection*{Rao-Cramer lower bound}    
-$\E[(\myhat{\theta} - \theta_0)^2] \geq (\frac{\partial}{\partial\theta_0}b_{\myhat{\theta}}+1^2)\mathcal{I}(\theta)^{-1} + b_{\myhat{\theta}}^2$\\
+$\E[(\myhat{\theta} - \theta_0)^2] \geq (\frac{\partial}{\partial\theta_0}b_{\myhat{\theta}}+1)^2\mathcal{I}(\theta)^{-1} + b_{\myhat{\theta}}^2$\\
 Derivation: 
 $(\frac{\partial}{\partial\theta_0}b_{\myhat{\theta}}+1)^2 = 
  \E[\Lambda\myhat{\theta}]^2 = \E[\Lambda(\myhat{\theta} - \E[\myhat{\theta}])]^2 \leq \E[\Lambda^2]\E[(\myhat{\theta}-\E[\myhat{\theta}])^2] = \mathcal{I}(\theta)\E[(\myhat{\theta} - \theta_0)^2] + b_{\myhat{\theta}}^2

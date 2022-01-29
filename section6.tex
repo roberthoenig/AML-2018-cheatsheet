@@ -1,21 +1,21 @@
 \section*{Ensemble Methods}
 \subsection*{Bagging}
-Given dataset $Z ={(x_i,y_i)}$, ind. (\emph{not possible!}) bootstrap samples $(Z'_i) \sim Z$, classifiers $b, b^{(i)}$ trained on $Z, (Z'_i)$, bagging creates classifier $\bar{b}^{(M)}(x) = \frac{1}{M}\sum b^{(i)}(x)$. We have $\E[(Y-\bar{b}^{(M)}(X))^2] \leq \E[(Y-b(X))^2]$.\\
+Given dataset $Z =\{(x_i,y_i)\}\sim D$, ind. (\emph{not possible!}) bootstrap samples $(Z'_i) \sim Z$, classifiers $b$, $b^{(i)}$ trained on $Z$, $(Z'_i)$, bagging creates classifier $\bar{b}^{(M)}(x) = \frac{1}{M}\sum b^{(i)}(x)$. We have $\E_{\color{gray}D,Y,X}[(Y-\bar{b}^{(M)}(X))^2] \leq \E[(Y-b(X))^2]$.\\
 \textbf{Random forests:} Train ensemble with bagging, randomly subsample features for each splitting step.\\
-\textbf{Randomized Feature Selection:} Create datasets $X_i = \bar{T_i}^TX\bar{S_i}$ with $T_i \overset{\mathrm{P= \eta}}{\subset} [n]$, $S_i \overset{\mathrm{P=\eta}}{\subset} [p]$ and $\bar{A} =$\\
-\emph{Theorems for case of linear regression:}
-\emph{\textbf{Opt.:}} $\inf_{\alpha\leq\frac{p}{n}}\lim_{M,n,p\to\infty}\E[R(\beta^{(M)})] = \inf_{\lambda}\lim_{M,n,p\to\infty}\E[R(\hat{\beta}_{\lambda}^{\mathrm{ridge}})]$ and $\inf_{\lambda}\hat{\beta}_{\lambda}^{\mathrm{ridge}}$ is asympt. opt., where $\beta^{(i)} = \argmin_\beta ||X_i\bar{S}_t^T\beta - \bar{T}_i^T\vy||^2_2$ s.t. $(S^c_t)^T\beta=0$.\\
-\mbox{\emph{\textbf{Regu.:}} If $X_i = X_i\bar{S_i}$ then $\beta^{(M)}\overset{p}{\to}\alpha\hat{\beta}^{\mathrm{LS}}$.}
-\emph{\textbf{SGD+Dropout = RFS+Ensemble:}} If $\beta^{(t+t)} = \beta{(t)}-\eta(t)\nabla_\beta||X_i\bar{S_i}\bar{S_i}^T\beta - \vy||^2_2$ then $\beta^{(t)} \overset{p}{\to}\argmin_\beta \frac{1}{M}\sum_{t\leq M}R^{(t)}(\beta)$.
+\textbf{Randomized Feature Selection:} For $X\in\mathbb{R}^{n\times p}$, create datasets \mbox{$X_i = \bar{T_i}^TX\bar{S_i}$ with $T_i \overset{\mathrm{P= \eta}}{\subset} [n]$, $S_i \overset{\mathrm{P=\alpha}}{\subset} [p]$.}\\
+\emph{For linear regression:}
+\emph{Optimality Th.:} $\inf_{\alpha\leq\frac{p}{n}}\lim_{M,n,p\to\infty}\E_{X,S_i,T_i}[R(\beta^{(M)})] = \inf_{\lambda}\lim_{M,n,p\to\infty}\E_{X,S_i,T_i}[R(\hat{\beta}_{\lambda}^{\mathrm{ridge}})]$  where $\beta^{(i)} = \argmin_\beta ||X_i\bar{S}_t^T\beta - \bar{T}_i^T\vy||^2_2$ s.t. $(S^c_t)^T\beta=0$.\\ (Fact: $\inf_{\lambda}\hat{\beta}_{\lambda}^{\mathrm{ridge}}$ is the asympt. opt. linear regression estimator)
+\emph{Regularization Th:} If $X_i = X\bar{S_i}$ then $\beta^{(M)}\overset{p}{\to}\alpha\hat{\beta}^{\mathrm{LS}}$.\\
+\emph{\textbf{SGD+Dropout = RFS+Ensemble:}} \mbox{If $\beta^{(t+t)} = \beta{(t)}-\eta(t)\nabla_\beta||X_i\bar{S_i}\bar{S_i}^T\beta - \vy||^2_2$} then $\beta^{(t)} \overset{p}{\to}\argmin_\beta \frac{1}{M}\sum_{t\leq M}R^{(t)}(\beta)\overset{p}{\to}\alpha^{-1}\beta^{\mathrm{ridge}}_{\frac{1-\alpha}{\alpha}}$.
 
 \subsection*{Boosting (> Forests > Bagging)}
 \textbf{AdaBoost:}\\
-Init: $b^{(0)}=0$, $\vw=\frac{1}{n}$, $b^{(i)}\in\{0,1\}$\\
+Init: $\tilde{b}^{(0)}=0$, $\vw=\frac{1}{n}$\\
 \emph{Train, Eval, Add, Reweight, {\tiny\CircArrowRight{}}:}\\
-$b^{(t)} = \argmin_b \mathcal{L}^{(\vw)}(b)=\sum w_i\mathbf{1}_{b(x_i)\neq y_i}$
-$\epsilon_t=\mathcal{L}^{(\vw)}(b^{(t)})$\\
-$b^{(t)} = b^{(t-1)} + \alpha_t b^{(t)}$, $\alpha_t = \log(\frac{1}{\mathrm{err}_t}-1)$.\\
-$w_i \leftarrow w_i\exp(\alpha_t\mathbf{1}_{b^{t}(x_i) \neq y_i})$\\
+$\mathcal{L}^{(\vw)}(b)=\sum w_i\mathbf{1}_{b(x_i)\neq y_i}$\\
+$b^{(t)} = \argmin_b \mathcal{L}^{(\vw)}(b) = \mathrm{err_t}$\\
+$\tilde{b}^{(t)} = \tilde{b}^{(t-1)} + \alpha_t b^{(t)}$, $\alpha_t = \log(\frac{1}{\mathrm{err}_t}-1)$.\\
+$w_i \leftarrow w_i\exp(\alpha_t\mathbf{1}\{b^{t}(x_i) \neq y_i\})$\\
 \textbf{Viewpoints:}\\
 \mbox{\emph{\textbf{FSAM:}} \emph{(= AdaBoost for $\mathcal{L}=\exp(-yy')$}}
 $(\alpha_{t+1}, b^{(t+1)}) = \argmin\sum\mathcal{L}(y_i, \alpha_i b(x_i) + f_t(x_i))$.
@@ -30,7 +30,7 @@ For instance space $\mathcal{X}$, algorithm $\mathcal{A}$ can learn concept clas
 $\mathcal{C}\subset\mathcal{P}(\mathcal{X})$ from hypothesis class $\mathcal{H}\subset\mathcal{P}(\mathcal{X})$ if $\exists\mathrm{poly}(\cdot,\cdot,\cdot)$ s.t.
 $\forall$dists $\mathcal{D}$ on $\mathcal{X}\times\{0,1\}$, $\forall 0<\epsilon<\frac{1}{2}$, $0<\delta<\frac{1}{2}$, $\forall Z=\{(X_i,Y_i)\}\sim\mathcal{D}$ with $n\geq\mathrm{poly}(\frac{1}{\epsilon},\frac{1}{\delta},\mathrm{size}(c))$, $\hat{c} = \mathcal{A}(Z)\in\mathcal{H}$ satisfies $P_Z(\mathcal{R}(\hat{c})-\inf_{c\in\mathcal{C}}\mathcal{R}(c)\leq\epsilon) \geq 1-\delta$.
 \textbf{Efficient PAC learnability:} $\mathcal{A}$ runs in $O(\mathrm{poly}(\frac{1}{\delta},\frac{1}{\epsilon}))$.\\
-\textbf{Weak PAC learnability:} Allow ``larger'' non-trivial $\epsilon$, e.g. only req. $\epsilon < \frac{1}{2}$.
+\textbf{Weak PAC learnability:} Allow ``larger'' $\epsilon$, e.g. only req. $\epsilon < \frac{1}{2}$.
 
 \textbf{VC-dimension:} $A\subset\mathcal{X}$ can be \textbf{shattered} by $\mathcal{C}$ if $\forall S\subset A.\, \exists c\in\mathcal{C}.\, c\cap A = S$.
 \textbf{VC}($\mathcal{C}$) = max $n$ s.t. $\exists A\subset\mathcal{X}$ with $|A|=n$ and $\mathcal{C}$ shatters $|A|$. 
@@ -39,8 +39,7 @@ $\forall$dists $\mathcal{D}$ on $\mathcal{X}\times\{0,1\}$, $\forall 0<\epsilon<
 
 \textbf{Bayes error:} $\inf_{f\in\mathcal{X}\to\{0,1\}}\mathcal{R}(f)$. For 0/1-loss: $f^*(x) = \argmax_{y\in\{0,1\}}p(y|x)$.
 
-\subsection*{PAC theorems}
-Assume $\mathcal{H} = \mathcal{C}$.\\
+\subsection*{PAC theorems \normalfont \emph{(Assume $\mathcal{H} = \mathcal{C}$.)}}
 \textbf{(1) Finite-$|\mathcal{C}|$:} For \textbf{consistent hypothesis} $\hat{c}=\mathcal{A}(Z)$, i.e. $\forall Z.\,\mathcal{\hat{R}}(\hat{c},Z)=0$, if $n\geq \frac{1}{\epsilon}(\log\mathcal{H}+\log\frac{1}{\delta})$ then $P(\mathcal{R}(\hat{c}) \leq \epsilon) \geq 1-\delta$.\\
 \textbf{(2) Finite-$|\mathcal{C}|$:} Let $\hat{c}^*_n = \mathrm{ERM}(Z) = \argmin_{c\in\mathcal{C}}\frac{1}{n}\sum_{i\leq n}\mathbf{1}\{c(X_i)\neq Y_i\}$. Then, $P(\mathcal{R}(\hat{c}^*_n) - \inf_{c\in\mathcal{C}}\mathcal{R}(c) > \epsilon) \leq 2|\mathcal{C}|\exp(-2n\epsilon^2)$.\\
 \textbf{(3) VC:} (If $\mathrm{VC}_\mathcal{C}>2$?) then 
@@ -60,9 +59,8 @@ Posterior $\mathbf{\mu},\mathbf{\Sigma}|X\sim\mathrm{NIW}(m_p,K_p,v_p,S_p)$.\\
 
 \textbf{d-separation:} \emph{Given:} Observed RVs $Z$.
 RVs $A$, $B$ are d-separated along path $p$ if p contains
-any pattern of {\color{red}add}:\\
-
-$A \bot B | Z$ if $A$, $B$ are d-separated along every path.
+any pattern of $\circ>\bullet>\circ$, $\circ<\bullet>\circ$, $\circ>\Delta<\circ$.\\
+\mbox{$A \bot B | Z$ if $\forall$paths $A$, $B$ d-separated.}
 
 \subsection*{Nonparametric GMMs}
 \emph{Three equivalent formalizations:}\\

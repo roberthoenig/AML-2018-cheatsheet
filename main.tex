@@ -11,12 +11,14 @@
 %\usepackage[lf,minionint]{MinionPro}
 \usepackage{multicol}
 \usepackage{wrapfig}
-\usepackage[top=1mm,bottom=4mm,left=2mm,right=2mm]{geometry}
+% \usepackage[top=1mm,bottom=4mm,left=2mm,right=2mm]{geometry}
+\usepackage[top=5mm,bottom=5mm,left=5mm,right=3mm]{geometry}
 % \usepackage[framemethod=tikz]{mdframed}
 \usepackage{microtype}
 \usepackage{float}
 \usepackage{mathtools}
 \usepackage{xcolor}
+\usepackage{cancel}
 \usepackage{stackengine,amssymb,graphicx,scalerel}
 
 \newcommand\SL{\stackengine{.2ex}{S\,}{\,L}{U}{c}{F}{F}{L}}
@@ -61,6 +63,7 @@
 % Marilou Beyeler
 % \end{mdframed}
 % }
+
 
 \makeatletter
 \def\moverlay{\mathpalette\mov@rlay}
@@ -205,13 +208,13 @@
 \makeatother
 \setlength{\parindent}{0pt}
 
+% \setlength{\columnsep}{0.1cm}
+
 \begin{document}
 \small
 \begin{multicols*}{5}
 \input{section1}
 \input{section2}
-\input{section3}
-\input{section4}
 \input{section5}
 \input{section6}
 \input{section7}
