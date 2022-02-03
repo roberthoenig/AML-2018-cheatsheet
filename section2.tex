@@ -46,11 +46,10 @@ Transformation $h_m(\mathbf{X}):\mathbb{R}^d \rightarrow \mathbb{R}$
 \textbf{Definition:} $f: \mathcal{X} \rightarrow \mathbb{R} \sim \mathrm{GP}(\mu, k)$ iff $\forall A \subset \mathcal{X}\!.\, f_A \sim \mathcal{N}(\mu_A, \mK_{AA})$\\
 \textbf{Model:} 
 $\rvy = f_A + \mathbf{\epsilon}$, $\mathbf{\epsilon} \sim \mathcal{N}(0, \sigma^2\mathbb{I})$\\
-\textbf{Prediction:}\\
-$p(f;A,\rvy) \sim \mathrm{GP}(f;\mu', k')$ with\\
-\mbox{\hspace{-1em}$\mu'(\vx) = \mu(\vx) + \vk_{\vx,A}(\mK_{AA} + \sigma^2\mathbb{I})^{-1}(\rvy_A - \mu_A)$}\\
-\mbox{\hspace{-2em}
-$k'(\vx,\vx') = k(\vx,\vx') - \vk_{\vx,A}(\mK_{AA}+\sigma^2\mathbb{I})^{-1}\vk^T_{\vx',A}$}\\
+\textbf{Prediction:}
+$p(f;A,\rvy) \sim \mathrm{GP}(f;\mu', k')$ with
+$\mu'(\vx)=\mu(\vx)+\vk_{\vx,A}(\mK_{AA}+\sigma^2\mathbb{I})^{-1}(\rvy_A-\mu_A)$ and 
+$k'(\vx,\vx') = k(\vx,\vx') - \vk_{\vx,A}(\mK_{AA}+\sigma^2\mathbb{I})^{-1}\vk^T_{\vx',A}$
 % \textbf{Derivation:}\\
 % $p(\begin{bmatrix}
 % \mathbf{y}\\
@@ -72,15 +71,15 @@ $k'(\vx,\vx') = k(\vx,\vx') - \vk_{\vx,A}(\mK_{AA}+\sigma^2\mathbb{I})^{-1}\vk^T
 % $\mathbf{C}=\mathbf{K}_{AA}+\sigma^2\mathbb{I} \quad c{=}k(x_*,x_*){+}\sigma^2$
 
 \subsection*{Gauss-Markov Theorem}
-For any unbiased linear estimator $\tilde{\theta} = c^T\mathbf{y}$ of $a^T\mathbf{\beta}$, it holds that $\Var(a^T\myhat{\beta}^{\mathrm{OLS}}) \leq \Var(c^T\mathbf{y})$.
+For any unbiased linear estimator $\tilde{\theta} = c^T\mathbf{y}$ of $a^T\mathbf{\beta}$, it holds that $\Var(a^T\myhat{\beta}^{\mathrm{OLS}}) \leq \Var(c^T\mathbf{y})$. \emph{Proof:} 1. Set $c^T\rvy = a^T\myhat{\beta}+a^TD\rvy$ 2. Prove $a^TD\mX=0$. 3. Expand $\Var(c^T\rvy)=c^T\Var(\rvy)c\ldots$
 
 \subsection*{Bias-Variance tradeoff}
 $\color{gray}\mathbb{E}[\hat{f_D}(x)-Y)^2|X=x]=$\\
 $\mathbb{E}_D\mathbb{E}[(\hat{f_D}(x)-Y)^2|X=x]=$\\
-$\color{gray}\mathbb{E}_D[(\hat{f_D}(X)-\mathbb{E}[Y|X=x])^2]+$\\$\color{gray}\mathbb{E}[Y-\mathbb{E}[Y|X=x]]^2=$\\
+$\color{gray}\mathbb{E}_D[(\hat{f_D}(X)-\mathbb{E}[Y|X=x])^2]+$\\$\color{gray}\mathbb{E}[(Y-\mathbb{E}[Y|X=x])^2]=$\\
 $\mathbb{E}_D[(\hat{f}_D(x)-\mathbb{E}_D[\hat{f}(x)])^2]$ (variance)\\
 $+(\mathbb{E}_D[\hat{f}_D(x)]-\mathbb{E}[Y|X=x])^2$ (bias$^2$)\\
-$+\mathbb{E}[Y-\mathbb{E}[Y|X=x]]^2$ (noise$^2$)\\
+$+\mathbb{E}[(Y-\mathbb{E}[Y|X=x])^2]$ (noise)\\
 
 $|\mathcal{X}|\downarrow \quad|\mathcal{C}|\uparrow\quad\Rightarrow\quad\mathrm{var.}\uparrow\quad\mathrm{bias^2}\downarrow $\\
 $|\mathcal{X}|\uparrow \quad|\mathcal{C}|\downarrow\quad\Rightarrow\quad\mathrm{var.}\downarrow\quad\mathrm{bias^2}\uparrow $

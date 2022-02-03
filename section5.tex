@@ -25,7 +25,7 @@
 \textbf{Steps:} Model $p_\theta(X,Y)$ $\rightarrow$ Compute $\myhat\theta = \mathrm{MLE}(\theta)$ $\rightarrow$ Compute $p_{\myhat\theta}(Y|X)$ $\rightarrow$ Probabilistic Discriminative.\\
 \textbf{Example (Mixture of Gaussians):} $p_\theta(X,Y)=Y\beta\mathcal{N}(X;\mu_1,\Sigma_1)+(1-Y)(1-\beta)\mathcal{N}(X;\mu_0,\Sigma_0)$ $\rightarrow$ $\Sigma_1=\Sigma_0 \& \beta=\frac{1}{2} \implies p(Y|X) = \sigma(\vw^TX + w_0)$ (\textbf{LDA}) else $p(Y|X) = \sigma(X^T\mW X + \vw^TX + w_0)$ (\textbf{QDA})
 \subsection*{\color{orange}Probabilistic Discriminative}
-\textbf{Steps:} Model $p(Y|X) = Y\sigma(\vw^TX)+(1-Y)(1-\sigma(\vw^TX))$
+\textbf{Steps:} Model $p(Y|X) = \sigma(\vw^TX)^Y(1-\sigma(\vw^TX))^{1-Y}$
 
 \textbf{Example (Logistic Regression):} Max. log lik. $p(Y|X,w)$ with gradient ascent (or with Newton's method --- \textbf{Iterative Least Squares Regression})
 
@@ -91,13 +91,13 @@ $\mathcal{L}(\vw)=\sum_{\tilde{x}\in\mathcal{X}^\text{msc}}-w^T\tilde{x}$,\\
 $\frac{\delta\mathcal{L}(\vw)}{\delta\vw} = -\sum_{x_i\in\mathcal{X}^\text{msc}}y_ix_i$\\
 \textbf{Variable increment perceptron:}\\
 \mbox{\hspace{-0.5em}$\vw^{(k+1)}=\vw^{(k)}+\eta^{(k)}y_kx_k $ if $y_k{w^{(k)}}^Tx < 0$}\\
-Data linearly separable \& $\eta$ satisfies Robbins-Monro $\implies$ CV. 
-\subsection*{Fisher's Linear Discriminant Analysis}
+Data linearly separable \& $\sum \eta_k = \infty$ \& ${\sum_{k\leq m}\eta_k^2}/{(\sum\eta_k)^2}\to 0$ $\implies$ CV. 
+\subsection*{Fisher's LDA}
 $\implies$ A Linear Classifier projects training set onto
 single dimension.\\
 $\implies$ Max. between-class distance, min. within-class distance.\\
 \textbf{Objective:} \mbox{$\max_\vw J(\vw) = \frac{(\vw^T\bar{x_0} - \vw^T\bar{x_1})^2}{D_0+D_1}$}
-where $D_i = \sum_{x\in C_i}{(\vw^Tx - \vw^Tx_i)}$\\
+where $D_i = \sum_{x\in C_i}{(\vw^Tx - \vw^T\bar{x_ix})^2}$\\
 \textbf{Solution:}
 $\vw^* \propto S^{-1}(\bar{x_1}-\bar{x_0})$ where $S = \sum_{c\in\{0,1\}}\sum_{x\in C_c}(x-\bar{x_c})(x-\bar{x_c})^T$
 
@@ -113,8 +113,8 @@ $f, g_i, h_i$ convex \& Slater's condition are sufficient for \textbf{Strong dua
 
 \subsection*{Support Vector Machine (SVM)}
 Generalize Perceptron with margin and kernel:
-Find $\max_\vw \mathrm{margin}(\vw) = \max_\vw\min_i y_i(\frac{\vw^T}{||\vw||}\vx_i + w_0)$. Equivalent to \textbf{Primal}: $\min_\vw \frac{1}{2}||\vw||^2\,\,\mathrm{s.t.}\,\, y_i(\vw^Tx_i+w_0) \geq 1$. Get \textbf{Lagrangian} $\mathcal{L}(\vw, \lambda, \alpha) = \frac{1}{2}||\vw||^2 + \sum\alpha_j (1-y_j(\vw^T\vx_j+w_0))$. Solve $\nabla_\rvw\mathcal{L}=0, \frac{d\mathcal{L}}{dw_0}=0$ to get \textbf{Dual} $\max_\alpha -\frac{1}{2}\sum a_ia_jy_iy_j\vx^T_i\vx_j + \sum\alpha_i$ s.t.
-$\alpha_j\geq 0$ \& $\sum a_jy_i = 0$. Solve with \textbf{quadratic optimization}. Optimal $\vw^* = \sum_i \alpha^*_i y_i x_i, w_0^* = -\frac{1}{2}({\vw^*}^T{\vx^+}^T + {\vw^*}^T{\vx^-}^T)$. Complementary slackness $\color{black}\implies$ $\alpha$ sparse.
+Find $\max_\vw \mathrm{margin}(\vw) = \max_\vw\min_i y_i(\frac{\vw^T\vx_i + w_0}{||\vw||})$. Equivalent to \textbf{Primal}: $\min_\vw \frac{1}{2}||\vw||^2\,\,\mathrm{s.t.}\,\, y_i(\vw^Tx_i+w_0) \geq 1$. Get \textbf{Lagrangian} $\mathcal{L}(\vw, \lambda, \alpha) = \frac{1}{2}||\vw||^2 + \sum\alpha_j (1-y_j(\vw^T\vx_j+w_0))$. Solve $\nabla_\rvw\mathcal{L}=0, \frac{d\mathcal{L}}{dw_0}=0$ to get \textbf{Dual} $\max_\alpha -\frac{1}{2}\sum a_ia_jy_iy_j\vx^T_i\vx_j + \sum\alpha_i$ s.t.
+$\alpha_j\geq 0$ \& $\sum a_jy_i = 0$. Solve with \textbf{quadratic optimization}. Optimal $\vw^* = \sum_i \alpha^*_i y_i x_i, w_0^* = -\frac{1}{2}({\vw^*}^T{\vx^+} + {\vw^*}^T{\vx^-})$. Complem. slackness $\color{black}\implies$ $\alpha$ sparse.
 \subsection*{Soft Margin SVM}
 Introduce slack to relax constraints.
 \textbf{Primal:} $\min_\vw \frac{1}{2}||\vw||^2 + C\sum\xi_i$ s.t. $y_i(\vw^Tx_i+w_0) \geq 1-\xi_i$ and $\xi_i \geq 0$.
@@ -126,7 +126,7 @@ Consider the feature map $\vx \rightarrow \phi(\vx)$ induced by kernel $K(\vx, \
 $\alpha_j\geq 0$. For classification, we get ${\vw^*}^T\vx + w_0 = \sum_i \alpha_i^*y_iK(\vx_i, \vx) + w_0$.
 
 \subsection*{\mbox{Multiclass SVM (classes $z\in\{1,\cdots,M\}$)}}
-\textbf{Primal:} $\min_{\{\vw_z\}_{z=1}^M} \frac{1}{2}\sum_{z=1}^M \vw^T_z\vw_z {\color{gray} + C\sum_i \xi_i}$ s.t.
+\textbf{Prim.:}$\min_{\{\vw_z\}_{z=1}^M}\!\!\frac{1}{2}\sum_{z=1}^M \vw^T_z\vw_z {\color{gray} + C\sum_i \xi_i}$ s.t.
 $\forall i. (\mathbf{w}_{z_i}^T\mathbf{y}_i+w_{z_i})-\max_{z\not=z_i}(\mathbf{w}_z^T\mathbf{y}_i+w_{z})\geq 1{\color{gray}-\xi_i}$
 
 \subsection*{SSVM (complex inputs $\vy\in\mathcal{Y}$, complex outputs $z\in\mathbb{K}$)}
@@ -135,9 +135,8 @@ $\forall i. (\mathbf{w}_{z_i}^T\mathbf{y}_i+w_{z_i})-\max_{z\not=z_i}(\mathbf{w}
 \textbf{Primal:}
 $\min_\vw \frac{1}{2}\vw^T\vw {\color{gray} + C\sum_i \xi_i}$ s.t.
 \mbox{$\forall i,z\neq z_i.\,\,\mathbf{w}^T\psi(\mathbf{y}_i,z_i)-\mathbf{w}^T\psi(\mathbf{y}_i,z)$}\\$\geq \Delta(z, z_i){\color{gray}-\xi_i}$\\
-Each sample \textbf{y} is assigned to a structured output label $z$\\
 \textbf{Pred.:} \mbox{$h(\mathbf{y}) = \argmax_{z\in\mathbb{K}} \mathbf{w}^T\psi(\mathbf{y},z)$}
-\textbf{Training:} Cutting-plane algorithm --- successively add constr. and solve for $\vw$ until all constr. satisfied (need to eff. compute \emph{loss-augmented inference} $\argmax_{z'}\Delta(z_i, z') + \vw^T\psi(\vy_i, z')$).
+\textbf{Training:} Cutting-plane algorithm --- successively add constr. and solve for $\vw$ until all constr. satisfied (need to eff. compute \emph{loss-augmented inference} $\argmax_{z'}\Delta(z', z_i) + \vw^T\psi(\vy_i, z')$).
 
 
 \subsection*{Kernels}

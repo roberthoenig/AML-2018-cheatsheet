@@ -1,13 +1,13 @@
 \section*{Neural Networks}
 \textbf{Universal Approximation:} Any cont. $f:\mathbb{R}^n\to\mathbb{R}^p$ can be unif. approx. on comp. supp. $\mathcal{K}$ by NN with 1 hidden layer: $g_k(x)=\sigmoid(\alpha_k+\sum_{j\to k}w_{jk}\sigma(\alpha_j+\sum_{i\to j} w_{ij}x_i))$.\\
-\textbf{Robbins-Monro:} If $\E[\gamma]=0$, $\E[\gamma^2]=\sigma^2$, $(\theta-\theta^*)l(\theta) > 0$, $\exists b.\,l<b$, $\sum\eta(t) = \infty$, $\sum\eta(t)^2 < \infty$, then
-$\theta^{(t)}\overset{\mathcal{L}^2}{\to}\theta^*$ where
-$\theta^{(t+1)} = \theta^{(t)} - \eta(t)(\theta^{(t)}+\gamma^{(t)})$.
+\textbf{Robbins-Monro (root):} If $\E[\gamma]=0$, $\E[\gamma^2]=\sigma^2$, $(\theta-\theta^*)l(\theta) > 0$, $\exists b.\,l<b$, $\sum\eta(t) = \infty$, $\sum\eta(t)^2 < \infty$, then
+$\theta^{(t)}\overset{\mathcal{L}^2}{\to}\theta^*$ for
+$\theta^{(t+1)} = \theta^{(t)} - \eta(t)(l(\theta^{(t)})+\gamma^{(t)})$.
 \textbf{Representation Learning with InfoMax:} Find $\argmax_\theta I(X;Z) \approx \frac{1}{M}\sum_i\E_{Z|x_i}[\log p(x_i|Z)]$. \emph{Problem: Not robust --- $f_\theta:\mathcal{X}\to\mathcal{Z}$ becomes inj.}\\
 \textbf{VAEs:} \emph{Latent vars.} $Z\sim p_\theta(z)$ (Prior)\\
-\emph{Encoder} $p_\theta(x|z)$ (Likelihood)\\
-\emph{Decoder} $p_\theta(z|x)\approx q_\phi(z|x)$ (Posterior).\\
-\emph{\textbf{Training:}} $\max_{\theta,\phi} {\color{gray}\log p_\theta(x_i) \geq}$\\$ \mathcal{L}(x_i,\theta,\phi) = \mathrm{ELBO} = \E_{z\sim q_\phi}[$\\$\log p_\theta(x_i|z)] - D_{\mathrm{KL}}(q_\phi(z|x_i)||p_\theta(z|x_i))$.\\
-\textbf{GANs:} Solve $\min_G\max_D\E[\log(D(x))] + \E[\log(1-D(G(Z)))]$. (Latent vars $Z$.)\\
+\emph{Decoder} $p_\theta(x|z)$ (Likelihood)\\
+\emph{Encoder} $p_\theta(z|x)\approx q_\phi(z|x)$ (Posterior).\\
+\emph{\textbf{Training:}} $\max_{\theta,\phi} {\color{gray}\log p_\theta(x_i) \geq}$\\$ \mathcal{L}(x_i,\theta,\phi) = \mathrm{ELBO} = \E_{z\sim q_\phi}[$\\$\log p_\theta(x_i|z)] - D_{\mathrm{KL}}(q_\phi(z|x_i)||p_\theta(z))$.\\
+\textbf{GANs:} Solve $\min_G\max_D$\\$\E[\log(D(x))] + \E[\log(1-D(G(Z)))]$. (Latent vars $Z$.)\\
 \emph{\textbf{Training:}} Alternate between GD on $\min_G(\dots)$ and GA on $\max_D(\ldots)$.\\
 \emph{\textbf{Stability:}} Change GD on $\E[\log 1-D(G(Z))]$ to GA on $\E[\log D(G(Z))]$.
